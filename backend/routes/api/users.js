@@ -6,6 +6,10 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+
+// @route POST api/users
+// @desc signup
+// @access Public
 router.post(
   "/",
   [
@@ -26,7 +30,7 @@ router.post(
       let user = await User.findOne({ email });
 
       if (user) {
-        res.status(400).json({ errors: [{ msg: "Hmm ,User already exists" }] });
+        return res.status(400).json({ errors: [{ msg: "Hmm ,User already exists" }] });
       }
       const avatar = gravatar.url(email, {
         s: "200",
@@ -41,7 +45,6 @@ router.post(
       });
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
-      console.log(user.password);
       await user.save();
       const payload = {
         user: {
