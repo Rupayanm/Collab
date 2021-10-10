@@ -6,6 +6,8 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
+const router = express.Router();
+
 // @route POST api/auth/
 // @desc Login POST email password
 // @access Public

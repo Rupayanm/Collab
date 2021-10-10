@@ -18,5 +18,6 @@
   "homepage": "https://github.com/DoggoKing/Collab#readme",
   "devDependencies": {
     "concurrently": "^6.3.0"
-  }
+  },
+  "dependencies": {}
 }

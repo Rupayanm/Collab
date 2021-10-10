@@ -1,5 +1,7 @@
 import Login from "./Containers/Login/Login";
-import { Switch, Route, Redirect } from "react-router-dom";
+import Article from "./Containers/Article/Article";
+import { Switch, Route, Redirect, BrowserRouter } from "react-router-dom";
+import Layout from "./Containers/Layout/Layout";
 
 const PublicRoute = ({ component: Component, restricted, ...rest }) => {
   return (
@@ -30,7 +32,12 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
 function App() {
   return (
     <>
-      <Login />
+      <BrowserRouter>
+        <Switch>
+          <PublicRoute path="/login" exact component={Login} />
+          <PublicRoute path="/" exact component={Layout} />
+        </Switch>
+      </BrowserRouter>
     </>
   );
 }

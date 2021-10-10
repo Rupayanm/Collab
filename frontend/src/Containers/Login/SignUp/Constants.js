@@ -1,4 +1,10 @@
-import { FaGithub, FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
+import {
+  FaGithub,
+  FaFacebook,
+  FaTwitter,
+  FaLinkedin,
+  FaPython,
+} from "react-icons/fa";
 
 export const skillList = [
   { skill: "Python", icon: "" },
