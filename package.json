@@ -1,0 +1,22 @@
+{
+  "name": "collab",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DoggoKing/Collab.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DoggoKing/Collab/issues"
+  },
+  "homepage": "https://github.com/DoggoKing/Collab#readme",
+  "devDependencies": {
+    "concurrently": "^6.3.0"
+  }
+}
