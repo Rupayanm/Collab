@@ -6,6 +6,10 @@ const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
+
+// @route POST api/users
+// @desc signup
+// @access Public
 router.post(
   "/",
   [
@@ -43,7 +47,6 @@ router.post(
       });
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
-      console.log(user.password);
       await user.save();
       const payload = {
         user: {
