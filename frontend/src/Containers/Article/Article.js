@@ -2,7 +2,7 @@ import React from "react";
 
 const Article = ({ data }) => {
   return (
-    <div className="max-w-2xl h-full pl-20 pr-10 py-16 space-y-12">
+    <div className="max-w-2xl p-10 space-y-12">
       <article className="space-y-6 dark:bg-coolGray-800 dark:text-coolGray-50">
         <div className="space-y-6">
           <h1 className="text-4xl font-bold md:tracking-tight md:text-5xl">

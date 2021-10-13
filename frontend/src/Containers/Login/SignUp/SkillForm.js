@@ -1,6 +1,7 @@
 import React from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { skillList } from "./Constants";
+import { skillList } from "../../../Constants";
+import MultiSelectTabs from "../../../Components/MultiSelectTabs";
 
 const SkillForm = ({ setFormDetails, formDetails, setStep }) => {
   const removeSkill = (value) => {
@@ -20,27 +21,12 @@ const SkillForm = ({ setFormDetails, formDetails, setStep }) => {
         <label className="block text-md font-medium leading-relaxed tracking-tighter text-blueGray-700">
           Skills
         </label>
-        <div className="w-full pt-2 flex flex-wrap gap-x-3 gap-y-2">
-          {skillList.map((item, index) =>
-            formDetails.skills.includes(item.skill) ? (
-              <div
-                key={index}
-                onClick={() => removeSkill(item.skill)}
-                className="font-medium text-sm w-min py-2 px-4 border border-black rounded-lg text-white cursor-pointer transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800"
-              >
-                {item.skill}
-              </div>
-            ) : (
-              <div
-                key={index}
-                className="font-medium text-sm w-min py-2 px-4 border rounded-lg text-gray-500 cursor-pointer transition duration-500 ease-in-out transform"
-                onClick={() => addSkill(item.skill)}
-              >
-                {item.skill}
-              </div>
-            )
-          )}
-        </div>
+        <MultiSelectTabs
+          options={skillList}
+          selected={formDetails.skills}
+          addItem={addSkill}
+          removeItem={removeSkill}
+        />
       </div>
       <div className="inline-flex w-full">
         <div

@@ -3,7 +3,11 @@ module.exports = {
   purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        "menu-pattern": "url('assets/pattern.svg')",
+      },
+    },
   },
   variants: {
     extend: {},

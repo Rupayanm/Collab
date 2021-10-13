@@ -9,9 +9,9 @@ const ListItem = () => {
           <span className="text-sm dark:text-coolGray-400">Jun 1, 2020</span>
         </div>
         <div className="mt-3">
-          <a href="#" className="text-2xl font-bold hover:underline">
+          <p className="text-2xl font-bold hover:underline">
             Nos creasse pendere crescit angelos etc
-          </a>
+          </p>
           <p className="mt-2">
             Tamquam ita veritas res equidem. Ea in ad expertus paulatim
             poterunt. Imo volo aspi novi tur. Ferre hic neque vulgo hae athei
@@ -20,15 +20,12 @@ const ListItem = () => {
           </p>
         </div>
         <div className="flex items-center justify-between mt-4">
-          <a
-            href="#"
-            className="flex flex-nowrap gap-2 font-semibold items-center text-purple-700 hover:underline dark:text-emerald-400"
-          >
+          <p className="flex flex-nowrap gap-2 font-semibold items-center text-purple-700 hover:underline dark:text-emerald-400">
             Read more
             <FiArrowRight />
-          </a>
+          </p>
           <div>
-            <a href="#" className="flex items-center">
+            <p className="flex items-center">
               <img
                 src="https://source.unsplash.com/50x50/?portrait"
                 alt="avatar"
@@ -37,7 +34,7 @@ const ListItem = () => {
               <span className="hover:underline dark:text-coolGray-400">
                 Leroy Jenkins
               </span>
-            </a>
+            </p>
           </div>
         </div>
       </div>

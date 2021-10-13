@@ -19,5 +19,7 @@
   "devDependencies": {
     "concurrently": "^6.3.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "caniuse-lite": "^1.0.30001265"
+  }
 }

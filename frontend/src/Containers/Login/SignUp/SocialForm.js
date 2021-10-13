@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { socialList } from "./Constants";
+import { socialList } from "../../../Constants";
 import { FaChevronLeft } from "react-icons/fa";
 
 const SocialForm = ({ setFormDetails, formDetails, setStep, submitForm }) => {
