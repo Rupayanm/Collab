@@ -1,37 +1,58 @@
-import React, { useState } from "react";
-import { useLocation } from "react-router";
-import Article from "../Article/Article";
-import PreviewArticle from "../CreatePost/PreviewArticle";
+import React, { Suspense } from "react";
 import Nav from "../Navbar/Nav";
-import Menu from "../Sidebar/Menu";
-import PostForm from "../CreatePost/PostForm";
+import { sidebarRoutes, contentRoutes } from "../../routes";
+import { FormProvider } from "./FormContext";
+import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
+import { CustomRoute } from "../../RouteAccess";
+import Loading from "../../Components/Loading";
 
 const Layout = () => {
-  const [formDetails, setFormDetails] = useState({
-    name: "",
-    title: "",
-    description: "",
-    tags: [],
-    links: [],
-  });
-  const location = useLocation();
-
   return (
     <>
-      <div className=" flex flex-nowrap w-screen h-screen ">
-        <div className="hidden w-1/3 h-full border-r border-gray-300 bg-menu-pattern backdrop-contrast-150 md:block lg:w-1/4">
-          {/* <Menu /> */}
-          <PostForm formDetails={formDetails} setFormDetails={setFormDetails} />
-        </div>
-        <div className="w-full flex flex-col md:w-2/3 lg:w-3/4">
-          <div className="w-full h-auto">
-            <Nav />
+      <FormProvider>
+        <Router>
+          <div className=" flex flex-nowrap w-screen h-screen ">
+            <div className="hidden w-1/3 h-full border-r border-gray-300 bg-menu-pattern backdrop-contrast-150 md:block lg:w-1/4">
+              <Suspense fallback={<Loading />}>
+                <Switch>
+                  {sidebarRoutes.map((route, index) => (
+                    <CustomRoute
+                      path={route.path}
+                      protect={route.protect}
+                      exact={route.exact}
+                      // children={<route.component />}
+                      component={route.component}
+                      key={index}
+                    />
+                  ))}
+                  <Redirect to="/home" from="/" />
+                </Switch>
+              </Suspense>
+            </div>
+            <div className="w-full flex flex-col md:w-2/3 lg:w-3/4">
+              <div className="w-full h-auto">
+                <Nav />
+              </div>
+              <div className="w-full h-full flex-grow-1 overflow-y-scroll">
+                <Suspense fallback={<Loading />}>
+                  <Switch>
+                    {contentRoutes.map((route, index) => (
+                      <CustomRoute
+                        path={route.path}
+                        protect={route.protect}
+                        exact={route.exact}
+                        // children={<route.component />}
+                        component={route.component}
+                        key={index}
+                      />
+                    ))}
+                  </Switch>
+                </Suspense>
+              </div>
+            </div>
           </div>
-          <div className="w-full flex-grow-1 overflow-y-scroll">
-            <PreviewArticle data={formDetails} />
-          </div>
-        </div>
-      </div>
+        </Router>
+      </FormProvider>
     </>
   );
 };

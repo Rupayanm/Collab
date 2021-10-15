@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useHistory } from "react-router";
 import { MdOutlineArrowBack } from "react-icons/md";
 import MultiInput from "../../Components/MultiInput.js";
 import MultiSelectTabs from "../../Components/MultiSelectTabs";
 import { skillList } from "../../Constants";
+import { FormContext } from "../Layout/FormContext.js";
+import TextEditor from "../../Components/TextEditor/TextEditor.js";
 
-const PostForm = ({ formDetails, setFormDetails }) => {
-  const removeLink = (value) => {
-    let links = formDetails.links.filter((item) => item !== value);
+const PostForm = () => {
+  const history = useHistory();
+  const { formDetails, setFormDetails } = useContext(FormContext);
+
+  const setDescription = (description) => {
+    setFormDetails({ ...formDetails, description });
+  };
+
+  const removeLink = (index) => {
+    let links = formDetails.links;
+    links.splice(index, 1);
     setFormDetails({ ...formDetails, links });
   };
 
@@ -32,7 +43,10 @@ const PostForm = ({ formDetails, setFormDetails }) => {
 
   return (
     <div className=" w-full h-screen relative py-10  dark:bg-coolGray-800 dark:text-coolGray-100 overflow-x-hidden">
-      <div className="w-min z-10 backdrop-filter backdrop-blur-sm fixed top-10 left-8 p-1.5 border border-gray-300 rounded-full hover:border-gray-500 focus:bg-gray-500 ">
+      <div
+        onClick={() => history.goBack()}
+        className="w-min z-10 backdrop-filter backdrop-blur-sm fixed top-10 left-8 p-1.5 border border-gray-300 rounded-full hover:border-gray-500 focus:bg-gray-500 "
+      >
         <MdOutlineArrowBack size={25} className="pointer-events-none" />
       </div>
       <div className="w-full min-h-full px-6 flex flex-col flex-nowrap">
@@ -58,16 +72,9 @@ const PostForm = ({ formDetails, setFormDetails }) => {
             <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
               Description
             </label>
-            <textarea
-              type="decription"
-              placeholder="Description"
-              value={formDetails.description}
-              onChange={(e) =>
-                setFormDetails({ ...formDetails, description: e.target.value })
-              }
-              className="w-full resize-y h-40 px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
-              required=""
-            />
+            <div className="w-full resize-y mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ">
+              <TextEditor setDescription={setDescription} />
+            </div>
           </div>
           <div className="mt-4">
             <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">

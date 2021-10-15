@@ -1,12 +1,30 @@
-import React from "react";
+import React, { useRef } from "react";
+import { TOKEN } from "../../Constants";
+import { createPost } from "../../requests.config";
 
 const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
+  const formRef = useRef(null);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (formRef.current.reportValidity()) {
+      fetch("http://localhost:5000/api/auth", createPost(formDetails))
+        .then((response) => {
+          return response.json();
+        })
+        .then((response) => {
+          localStorage.setItem(TOKEN, response.token);
+        })
+        .catch(console.log);
+    }
+  };
+
   return (
     <div className="w-full h-100">
       <h1 className="mt-12 text-3xl font-semibold text-black tracking-ringtighter sm:text-3xl title-font">
         Log in to your account
       </h1>
-      <form className="mt-6" action="#" method="POST">
+      <form className="mt-6" onSubmit={handleSubmit} ref={formRef}>
         <div>
           <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
             Email Address
@@ -15,6 +33,7 @@ const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
             type="email"
             placeholder="Your Email "
             value={formDetails.email}
+            required
             onChange={(e) =>
               setFormDetails({ ...formDetails, email: e.target.value })
             }
@@ -29,12 +48,12 @@ const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
             type="password"
             placeholder="Your Password"
             value={formDetails.password}
+            required
             minLength="8"
             onChange={(e) =>
               setFormDetails({ ...formDetails, password: e.target.value })
             }
             className="w-full px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
-            required=""
           />
         </div>
         <div className="mt-2 text-right">
@@ -42,13 +61,16 @@ const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
             Forgot Password?
           </p>
         </div>
-        <div className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 ">
+        <button
+          type="submit"
+          className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 "
+        >
           Log In
-        </div>
+        </button>
       </form>
       <hr className="w-full my-6 border-blueGray-300" />
       <div className="flex justify-center">
-        <div
+        <button
           type="button"
           className="inline-flex w-full px-4 py-3 justify-center font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-black hover:text-white focus:outline-none focus:shadow-outline focus:ring-2  "
         >
@@ -91,7 +113,7 @@ const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
             </svg>
             <span className="ml-4"> Log in with Google </span>
           </div>
-        </div>
+        </button>
       </div>
       <div className="mt-8 text-center flex justify-between">
         <p> Need an account? </p>

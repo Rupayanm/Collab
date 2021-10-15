@@ -3,7 +3,7 @@ import { FiArrowRight } from "react-icons/fi";
 
 const ListItem = () => {
   return (
-    <div className="w-full dark:bg-coolGray-800 dark:text-coolGray-100">
+    <div className="w-full dark:bg-coolGray-800 dark:text-coolGray-100 transition duration-500 ease-in-out transform">
       <div className="container max-w-4xl px-6 py-6 mx-auto dark:bg-coolGray-900">
         <div className="flex items-center justify-between">
           <span className="text-sm dark:text-coolGray-400">Jun 1, 2020</span>

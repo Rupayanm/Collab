@@ -1,5 +1,7 @@
 import { Route, Redirect } from "react-router-dom";
 
+const token = localStorage.getItem("token");
+
 export const PublicRoute = ({ component: Component, restricted, ...rest }) => {
   return (
     // restricted = false meaning public route
@@ -7,20 +9,20 @@ export const PublicRoute = ({ component: Component, restricted, ...rest }) => {
     <Route
       {...rest}
       render={(props) =>
-        restricted ? <Redirect to="/home" /> : <Component {...props} />
+        token ? <Redirect to="/home" /> : <Component {...props} />
       }
     />
   );
 };
 
-export const PrivateRoute = ({ component: Component, ...rest }) => {
+export const CustomRoute = ({ component: Component, protect, ...rest }) => {
   return (
     // Show the component only when the user is logged in
     // Otherwise, redirect the user to /signin page
     <Route
       {...rest}
       render={(props) =>
-        true ? <Component {...props} /> : <Redirect to="/login" />
+        protect && !token ? <Redirect to="/login" /> : <Component {...props} />
       }
     />
   );

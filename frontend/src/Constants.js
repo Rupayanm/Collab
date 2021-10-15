@@ -1,5 +1,7 @@
 import { FaGithub, FaFacebook, FaTwitter, FaLinkedin } from "react-icons/fa";
 
+export const TOKEN = "hashed_token";
+
 export const skillList = [
   { value: "Python", icon: "", label: "Python" },
   { value: "Node", icon: "", label: "Node" },

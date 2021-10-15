@@ -23,12 +23,11 @@ const Menu = () => {
             )}
           </Link>
         ))}
-        <div
-          onClick={() => 1}
-          className="hidden w-full bg-black font-semibold text-xl text-white text-center absolute bottom-6 py-4 px-6 rounded-full cursor-pointer transition duration-500 shadow-xl ease-in-out transform hover:bg-ring-4 md:block"
-        >
-          Create Post
-        </div>
+        <Link to={"/create"}>
+          <div className="hidden w-full bg-black font-semibold text-xl text-white text-center absolute bottom-6 py-4 px-6 rounded-full cursor-pointer transition duration-500 shadow-xl ease-in-out transform hover:bg-ring-4 md:block">
+            Create Post
+          </div>
+        </Link>
       </div>
     </div>
   );

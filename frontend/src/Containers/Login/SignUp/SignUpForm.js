@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import SocialForm from "./SocialForm";
 import DetailsForm from "./DetailsForm";
 import SkillForm from "./SkillForm";
+import { TOKEN } from "../../../Constants";
 
 const SignUpForm = ({ setSignup, setFormDetails, formDetails }) => {
   const [step, setStep] = useState(1);
@@ -9,7 +10,22 @@ const SignUpForm = ({ setSignup, setFormDetails, formDetails }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formDetails);
+    fetch("http://localhost:5000/api/users", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formDetails),
+    })
+      .then((response) => {
+        console.log(response);
+        return response.json();
+      })
+      .then((response) => {
+        console.log(response);
+        localStorage.setItem(TOKEN, response.token);
+      })
+      .catch(console.log);
   };
 
   return (
