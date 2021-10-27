@@ -4,14 +4,13 @@ import { FormContext } from "../Layout/FormContext";
 
 const PreviewArticle = () => {
   const { formDetails } = useContext(FormContext);
+  console.log(formDetails.description);
   return (
     <div className="max-w-2xl p-10 space-y-12">
       <article className="space-y-6 dark:bg-coolGray-800 dark:text-coolGray-50">
         <div className="space-y-6">
           <h1 className="text-4xl font-bold md:tracking-tight md:text-5xl break-words">
-            {formDetails.title
-              ? formDetails.title
-              : "This is a demo title!!!"}
+            {formDetails.title ? formDetails.title : "This is a demo title!!!"}
           </h1>
         </div>
         <div className="dark:text-coolGray-100 break-words">

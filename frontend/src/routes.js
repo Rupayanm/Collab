@@ -1,4 +1,12 @@
 import { lazy } from "react";
+import {
+  HOME,
+  CREATE,
+  ARTICLE,
+  EXPLORE,
+  NOTIFICATION,
+  PROFILE,
+} from "./routes.contants";
 
 const PostForm = lazy(() => import("./Containers/CreatePost/PostForm"));
 const Menu = lazy(() => import("./Containers/Sidebar/Menu"));
@@ -8,30 +16,37 @@ const PreviewArticle = lazy(() =>
   import("./Containers/CreatePost/PreviewArticle")
 );
 
-export const sidebarRoutes = [
+export const routes = [
   {
-    path: "/create",
-    protect: true,
-    component: () => <PostForm />,
+    path: CREATE,
+    restricted: true,
+    exact: true,
+    Sidebar: () => <PostForm />,
+    Content: () => <PreviewArticle />,
   },
   {
-    path: "/",
-    component: () => <Menu />,
-  },
-];
-
-export const contentRoutes = [
-  {
-    path: "/create",
-    protect: true,
-    component: () => <PreviewArticle />,
+    path: HOME,
+    Sidebar: () => <Menu />,
+    Content: () => <Feed />,
   },
   {
-    path: "/home",
-    component: () => <Feed />,
+    path: ARTICLE,
+    Sidebar: () => <Menu />,
+    Content: () => <Article />,
   },
   {
-    path: "/post/:id",
-    component: () => <Article />,
+    path: EXPLORE,
+    Sidebar: () => <Menu />,
+    Content: () => null,
+  },
+  {
+    path: NOTIFICATION,
+    Sidebar: () => <Menu />,
+    Content: () => null,
+  },
+  {
+    path: PROFILE,
+    Sidebar: () => <Menu />,
+    Content: () => null,
   },
 ];
