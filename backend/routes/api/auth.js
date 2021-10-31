@@ -20,17 +20,17 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(200).json({ errors: errors });
     }
     const { email, password } = req.body;
     try {
       let user = await User.findOne({ email });
       if (!user) {
-        return res.status(400).json({ errors: [{ msg: "Invalid email" }] });
+        return res.status(200).json({ error: { msg: "Invalid email" } });
       }
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ errors: [{ msg: "Invalid Password" }] });
+        return res.status(200).json({ error: { msg: "Invalid Password" } });
       }
       const payload = {
         user: {

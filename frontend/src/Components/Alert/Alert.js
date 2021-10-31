@@ -1,4 +1,5 @@
 import React from "react";
+import toast from "react-hot-toast";
 
 const icons = (type) => {
   switch (type) {
@@ -10,11 +11,11 @@ const icons = (type) => {
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          strokeWidth="1.5"
           stroke="currentColor"
           fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
           <circle cx="12" cy="12" r="9"></circle>
@@ -29,11 +30,11 @@ const icons = (type) => {
           width="24"
           height="24"
           viewBox="0 0 24 24"
-          stroke-width="1.5"
+          strokeWidth="1.5"
           stroke="currentColor"
           fill="none"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
           <circle cx="12" cy="12" r="9"></circle>
@@ -52,20 +53,23 @@ const colors = {
   basic: "text-gray-600",
 };
 
-const Alerts = ({ type, message, onCancel }) => {
+const Alert = ({ type = "basic", message, t }) => {
   const color = colors[type];
 
   return (
-    <div className="container z-50 mb-5 items-center px-5 py-12 lg:px-20">
-      <div className={`w-full ${color} border rounded-lg shadow-xl `}>
-        <div className="flex items-center justify-between px-6 py-4 mx-auto ">
+    <div
+      className="z-50 items-center lg:px-20 bg-white rounded-lg cursor-pointer"
+      onClick={() => toast.dismiss(t.id)}
+    >
+      <div className={`w-full ${color} border rounded-lg shadow-xl`}>
+        <div className="flex items-center justify-between pl-6 pr-2 py-2 mx-auto ">
           <div className="flex">
-            <p className="text-sm font-semibold tracking-wide uppercase ">
-              <strong>{type}</strong> {message}
+            <p className="text-sm font-semibold tracking-wide pr-8">
+              {message}
             </p>
           </div>
           <button
-            className="p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-blueGray-600 focus:outline-none"
+            className=" transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-blueGray-600 focus:outline-none"
             type="button"
             aria-label="Close"
             aria-hidden="true"
@@ -78,4 +82,4 @@ const Alerts = ({ type, message, onCancel }) => {
   );
 };
 
-export default Alerts;
+export default Alert;

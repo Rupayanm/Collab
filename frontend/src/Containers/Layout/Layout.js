@@ -1,7 +1,7 @@
 import React from "react";
 import Nav from "../Navbar/Nav";
 
-const Layout = ({ Sidebar, Content }) => {
+const Layout = ({ Sidebar, Content, RightBar }) => {
   return (
     <>
       <div className=" flex flex-nowrap w-screen h-screen ">
@@ -12,8 +12,13 @@ const Layout = ({ Sidebar, Content }) => {
           <div className="w-full h-auto">
             <Nav />
           </div>
-          <div className="w-full h-full flex-grow-1 overflow-y-scroll">
-            <Content />
+          <div className="w-full h-full flex-grow-1 flex flex-row overflow-y-scroll">
+            <div className="w-full md:w-4/6 ">
+              <Content />
+            </div>
+            <div className="md:w-2/6 h-full">
+              <RightBar />
+            </div>
           </div>
         </div>
       </div>

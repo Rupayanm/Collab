@@ -8,6 +8,7 @@ import { routes } from "./routes";
 import Loading from "./Components/Loading/index";
 import { HOME } from "./routes.contants";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ function App() {
           </Suspense>
         </FormProvider>
       </QueryClientProvider>
+      <Toaster position="bottom-center" reverseOrder={false} />
     </>
   );
 }

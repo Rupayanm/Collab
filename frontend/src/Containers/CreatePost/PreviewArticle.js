@@ -4,7 +4,6 @@ import { FormContext } from "../Layout/FormContext";
 
 const PreviewArticle = () => {
   const { formDetails } = useContext(FormContext);
-  console.log(formDetails.description);
   return (
     <div className="max-w-2xl p-10 space-y-12">
       <article className="space-y-6 dark:bg-coolGray-800 dark:text-coolGray-50">

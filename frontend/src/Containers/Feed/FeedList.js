@@ -1,13 +1,16 @@
 import React from "react";
 import ListItem from "./ListItem";
-import { posts } from "../../demo/posts";
+// import { posts } from "../../demo/posts";
+import { useQuery } from "react-query";
+import { getFeed } from "../../queries/FeedQuery";
 
 const Feed = () => {
-  // const items = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const { data, refetch } = useQuery("feed", getFeed);
+
   return (
-    <div className="max-w-2xl px-4 grid grid-cols-1 divide-y divide-gray-200 ">
-      {posts.map((post, index) => (
-        <ListItem key={index} post={post} />
+    <div className="w-full px-4 grid grid-cols-1 divide-y divide-gray-200 ">
+      {data?.map((post, index) => (
+        <ListItem key={index} post={post} refetch={refetch} />
       ))}
     </div>
   );

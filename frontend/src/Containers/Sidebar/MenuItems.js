@@ -1,16 +1,16 @@
 import { RiHomeLine } from "react-icons/ri";
 import { GiCubeforce } from "react-icons/gi";
 import { AiOutlineUser } from "react-icons/ai";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import {HOME,EXPLORE,NOTIFICATION,PROFILE } from './../../routes.contants';
+// import { IoMdNotificationsOutline } from "react-icons/io";
+import { HOME, EXPLORE, PROFILE } from "./../../routes.contants";
 
 export const Menuitems = [
   { name: "Home", link: HOME, logo: <RiHomeLine size={24} /> },
   { name: "Explore", link: EXPLORE, logo: <GiCubeforce size={24} /> },
   { name: "Profile", link: PROFILE, logo: <AiOutlineUser size={24} /> },
-  {
-    name: "Notifications",
-    link: NOTIFICATION,
-    logo: <IoMdNotificationsOutline size={24} />,
-  },
+  // {
+  //   name: "Notifications",
+  //   link: NOTIFICATION,
+  //   logo: <IoMdNotificationsOutline size={24} />,
+  // },
 ];

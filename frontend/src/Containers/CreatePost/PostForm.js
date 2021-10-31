@@ -1,15 +1,50 @@
 import React, { useContext } from "react";
-import { useHistory } from "react-router";
+import { useHistory, Redirect } from "react-router";
+import toast from "react-hot-toast";
 import { MdOutlineArrowBack } from "react-icons/md";
 import MultiInput from "../../Components/MultiInput.js";
 import MultiSelectTabs from "../../Components/MultiSelectTabs";
 import { skillList } from "../../Constants";
-import { FormContext } from "../Layout/FormContext.js";
+import { FormContext, initialValues } from "../Layout/FormContext.js";
 import TextEditor from "../../Components/TextEditor/TextEditor.js";
+import { useQuery } from "react-query";
+import Alert from "../../Components/Alert/Alert.js";
+import { NewPost } from "./../../queries/PostQuery";
+import { HOME } from "../../routes.contants";
+
+// const validate = () => {};
 
 const PostForm = () => {
   const history = useHistory();
   const { formDetails, setFormDetails } = useContext(FormContext);
+
+  const onSuccess = (data) => {
+    if (data.error) {
+      console.log(error);
+    } else {
+      toast.custom((t) => (
+        <Alert t={t} message="Post created" type="success" />
+      ));
+      setFormDetails(initialValues);
+      <Redirect to={HOME} />;
+    }
+  };
+
+  const { isLoading, error, refetch } = useQuery(
+    "create-post",
+    () => NewPost(formDetails),
+    {
+      enabled: false,
+      cacheTime: 0,
+      onSuccess,
+    }
+  );
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isLoading) return;
+    refetch();
+  };
 
   const setDescription = (description) => {
     setFormDetails({ ...formDetails, description });
@@ -53,24 +88,28 @@ const PostForm = () => {
         <h1 className="mt-16 text-3xl font-semibold text-black tracking-ringtighter sm:text-3xl title-font">
           Post
         </h1>
-        <form className="mt-6" action="#" method="POST">
+        <form className="mt-6" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
-              Title
+              Title<span className="text-red-500">*</span>
             </label>
             <input
               type="text"
               placeholder="Title.. "
+              maxLength="120"
               value={formDetails.title}
               onChange={(e) =>
                 setFormDetails({ ...formDetails, title: e.target.value })
               }
               className="w-full px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
             />
+            <div className="text-xs text-gray-500 text-right pt-1.5 px-1.5">
+              {formDetails.title.length}/120
+            </div>
           </div>
           <div className="mt-4">
             <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
-              Description
+              Description<span className="text-red-500">*</span>
             </label>
             <div className="w-full resize-y mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ">
               <TextEditor setDescription={setDescription} />
@@ -78,7 +117,7 @@ const PostForm = () => {
           </div>
           <div className="mt-4">
             <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
-              Tags
+              Tags<span className="text-red-500">*</span>
             </label>
             <MultiSelectTabs
               options={skillList}
@@ -97,9 +136,9 @@ const PostForm = () => {
               values={formDetails.links}
             />
           </div>
-          <div className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 ">
+          <button className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 cursor-pointer ">
             Create Post
-          </div>
+          </button>
         </form>
       </div>
     </div>

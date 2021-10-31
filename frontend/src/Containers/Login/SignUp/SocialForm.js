@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { socialList } from "../../../Constants";
 import { FaChevronLeft } from "react-icons/fa";
+import { Audio } from "svg-loaders-react";
 
-const SocialForm = ({ setFormDetails, formDetails, setStep, submitForm }) => {
+const SocialForm = ({ setFormDetails, formDetails, setStep, isLoading }) => {
   const [social, setSocial] = useState("github");
 
   const updateSocial = (value) => {
@@ -48,7 +49,11 @@ const SocialForm = ({ setFormDetails, formDetails, setStep, submitForm }) => {
           type="submit"
           className="block flex-grow px-4 py-3 mt-6 font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-r-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 "
         >
-          Submit
+          {isLoading ? (
+            <Audio height={20} width={20} className="w-full mx-auto" />
+          ) : (
+            "Log in"
+          )}
         </button>
       </div>
     </>

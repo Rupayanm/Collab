@@ -1,31 +1,44 @@
 import React, { useState, useRef } from "react";
+import { useQuery } from "react-query";
+import { useHistory } from "react-router-dom";
+import toast from "react-hot-toast";
 import SocialForm from "./SocialForm";
 import DetailsForm from "./DetailsForm";
 import SkillForm from "./SkillForm";
+import Alert from "../../../Components/Alert/Alert";
 import { TOKEN } from "../../../Constants";
+import { HOME } from "../../../routes.contants";
+import { signup } from "../../../queries/AuthQuery";
 
 const SignUpForm = ({ setSignup, setFormDetails, formDetails }) => {
   const [step, setStep] = useState(1);
+  const history = useHistory();
   const formRef = useRef(null);
+
+  const onSuccess = (data) => {
+    if (data.error) {
+      toast.custom((t) => (
+        <Alert t={t} message={data.error.msg} type="error" />
+      ));
+    } else {
+      toast.custom((t) => (
+        <Alert t={t} message="Account registered" type="success" />
+      ));
+      localStorage.setItem(TOKEN, data.token);
+      history.push(HOME);
+    }
+  };
+
+  const { isLoading, refetch } = useQuery("signup", () => signup(formDetails), {
+    enabled: false,
+    onSuccess,
+    cacheTime: 0,
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/api/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formDetails),
-    })
-      .then((response) => {
-        console.log(response);
-        return response.json();
-      })
-      .then((response) => {
-        console.log(response);
-        localStorage.setItem(TOKEN, response.token);
-      })
-      .catch(console.log);
+    if (isLoading) return;
+    refetch();
   };
 
   return (
@@ -54,6 +67,7 @@ const SignUpForm = ({ setSignup, setFormDetails, formDetails }) => {
             setStep={setStep}
             formDetails={formDetails}
             setFormDetails={setFormDetails}
+            isLoading={isLoading}
           />
         ) : null}
       </form>
