@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const User = require("../../models/User");
+const Post = require("../../models/Post");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -60,6 +61,7 @@ router.post(
         : skills.split(',').map((skill) => ' ' + skill.trim()),
       ...rest
     };
+    profileFields.skills= profileFields.skills.map(v=>v.toLowerCase())
 
     // Build socialFields object
     const socialFields = { youtube, twitter, instagram, linkedin, facebook };
@@ -86,4 +88,38 @@ router.post(
     }
   }
 );
+
+
+// @route POST api/profilePosts/:id
+// @desc POST skills 
+// @access Private
+router.get('/profilePosts/:id',auth,async(req,res)=>{
+  const page = parseInt(req.query.page)
+  const limit = parseInt(req.query.limit)
+  
+  const startIndex = (page - 1) * limit
+  const endIndex = page * limit
+
+  const results = {}
+    results.next = {
+      page: page + 1,
+      limit: limit
+    }
+  
+    results.previous = {
+      page: page - 1,
+      limit: limit
+    }
+    
+  const id = req.params.id
+  try{
+    const posts = await Post.find({postedBy:id}).skip(startIndex).limit(limit).exec()
+    results.posts = posts
+    return res.status(200).json(results)
+  }catch(err){
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+
+})
 module.exports = router;

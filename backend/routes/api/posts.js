@@ -21,14 +21,15 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-
     let postFields = {
+      name:req.user.name,
       postedBy: req.user.id,
       title: req.body.title,
       description: req.body.description,
       members: req.body.members,
       tags: req.body.tags,
     };
+    postFields.tags = postFields.tags.map(v=>v.toLowerCase())
     try {
       let post = new Post({
         ...postFields,
@@ -45,7 +46,7 @@ router.post(
 // @route    GET api/posts/:id
 // @desc     Get post by ID
 // @access   Private
-router.get("/:id", auth, checkObjectId("id"), async (req, res) => {
+router.get("/:id", checkObjectId("id"), async (req, res) => {
   try {
     const post = await Post.findById(req.params.id);
 
@@ -92,18 +93,37 @@ router.delete("/:id", [auth, checkObjectId("id")], async (req, res) => {
 // @access   Private
 router.put("/like/:id", auth, checkObjectId("id"), async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-
-    // Check if the post has already been liked
-    if (post.likes.some((like) => like.user.toString() === req.user.id)) {
-      return res.status(400).json({ msg: "Post already liked" });
-    }
-
-    post.likes.push({ user: req.user.id });
-
-    await post.save();
-
-    return res.json(post.likes);
+    const dislikeKey="dislikes."+req.user.id
+    const likeKey = "likes."+req.user.id
+    const post = await Post.findOne({_id : req.params.id}).select("-likes -dislikes")
+    const isLiked = await Post.findOne({_id : req.params.id,[likeKey]:{$exists:true}})
+  
+    let likes={}
+    if (isLiked === null){
+      const ifDisliked = await Post.findOne({_id:req.params.id,[dislikeKey]:{$exists:true}})
+      if (ifDisliked === null){
+      likes = await Post.findByIdAndUpdate(req.params.id,
+      {$set : {[likeKey]:1,},$unset : {[dislikeKey]:""}, $inc:{likesCounter:1}},{new:true})
+      .select("likesCounter")
+}
+      else{
+        likes = await Post.findByIdAndUpdate(req.params.id,
+          {$set : {[likeKey]:1,},$unset : {[dislikeKey]:""}, $inc:{likesCounter:2}},{new:true})
+          .select("likesCounter")
+      }
+    }else{
+    
+      likes = await Post.findByIdAndUpdate(req.params.id,
+      {$unset : {[dislikeKey]:"" ,[likeKey]:""}, $inc:{likesCounter:-1}},{new:true})
+      .select("likesCounter")
+  }
+  const notification = {
+    id : req.user.id,
+    name: req.user.name,
+    body:"post liked"
+  }
+  await User.findByIdAndUpdate(post.postedBy , {$set : {[`notifications.${req.user.id}.like`]:notification}})
+  return res.status(200).json(likes)
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -115,21 +135,26 @@ router.put("/like/:id", auth, checkObjectId("id"), async (req, res) => {
 // @access   Private
 router.put("/unlike/:id", auth, checkObjectId("id"), async (req, res) => {
   try {
-    const post = await Post.findById(req.params.id);
-
-    // Check if the post has not yet been liked
-    if (!post.likes.some((like) => like.user.toString() === req.user.id)) {
-      return res.status(400).json({ msg: "Post has not yet been liked" });
+    const dislikeKey="dislikes."+req.user.id
+    const likeKey = "likes."+req.user.id
+    const post = await Post.findOne({_id : req.params.id,[dislikeKey]:{$exists:true}})
+    // Check if the post has not yet been disliked
+    if (post === null){
+      const ifLiked = await Post.findOne({_id:req.params.id,[likeKey]:{$exists:true}})
+      if (ifLiked === null){
+      const dislikes=await Post.findByIdAndUpdate(req.params.id,
+        {$set : {[dislikeKey]:1,}, $unset : {[likeKey]:""},$inc:{likesCounter:-1}},{new:true}).select("likesCounter")
+      return res.status(200).json(dislikes)}
+    else{
+      const dislikes=await Post.findByIdAndUpdate(req.params.id,
+        {$set : {[dislikeKey]:1,}, $unset : {[likeKey]:""},$inc:{likesCounter:-2}},{new:true}).select("likesCounter")
+      return res.status(200).json(dislikes)}
+    
+    }else{
+      const dislikes=await Post.findByIdAndUpdate(req.params.id,
+        {$unset : {[likeKey]:"",[dislikeKey]:""},$inc:{likesCounter:+1}},{new:true}).select("likesCounter")
+      return res.status(200).json(dislikes)
     }
-
-    // remove the like
-    post.likes = post.likes.filter(
-      ({ user }) => user.toString() !== req.user.id
-    );
-
-    await post.save();
-
-    return res.json(post.likes);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -161,6 +186,12 @@ router.post(
       post.comments.unshift(newComment);
 
       await post.save();
+        const notification = {
+    id : req.user.id,
+    name: req.user.name,
+    body:"comment in your post"
+  }
+    await User.findByIdAndUpdate(post.postedBy , {$set : {[`notifications.${req.user.id}.comment`]:notification}})
 
       res.json(post.comments);
     } catch (err) {
@@ -202,5 +233,14 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     return res.status(500).send("Server Error");
   }
 });
+router.delete("/deleteNotification/:id", auth, async(req,res)=>{
+  try{  
+    const notification = await  User.findOneAndUpdate(req.user.id , {"$unset":{[`notifications.${req.params.id}`]:1}},{new:true})
+    return res.status(200).json(notification)
+}catch (err) {
+  console.error(err.message);
+  return res.status(500).send("Server Error");
+}
+})
 
 module.exports = router;
