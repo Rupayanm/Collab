@@ -22,10 +22,12 @@ const Article = () => {
   const { isLoading, data } = useQuery("create-post", () => GetPost(id));
 
   if (isLoading) {
+    
     return (
       <>
         <Loading />
       </>
+
     );
   }
 

@@ -11,9 +11,7 @@ const NotificationBar = () => {
         </div>
         <div className="flex flex-col divide-y">
           {data.map((item, index) => (
-            <>
               <Accordian data={item} key={index} />
-            </>
           ))}
         </div>
       </div>

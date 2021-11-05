@@ -31,7 +31,7 @@ const ListItem = ({ post, refetch }) => {
             <BsCaretUp size={25} className="mx-auto" />
           </span>
           <p className="text-xs text-gray-500 font-semibold text-center">
-            {post.likes.length}
+            {post.likesCounter}
           </p>
           <span
             onClick={dislike}
