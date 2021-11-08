@@ -13,8 +13,8 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  picture: {
-    type: String,
+  images: {
+    type:{String}
   },
   date: {
     type: Date,
