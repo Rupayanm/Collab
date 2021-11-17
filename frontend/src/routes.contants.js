@@ -1,7 +1,9 @@
 export const HOME = "/home";
 export const EXPLORE = "/explore";
 export const CREATE = "/create";
-export const PROFILE = "/profile";
+export const EDIT = "/edit/:id";
+export const PROFILE = "/profile/:id?";
+export const PROFILEEDIT = "/profile/edit";
 export const NOTIFICATION = "/notification";
 export const ARTICLE = "/post/:id";
 export const LOGIN = "/login";

@@ -1,22 +1,45 @@
-import React, { useContext } from "react";
-import { useHistory, Redirect } from "react-router";
+import React, { useContext, useEffect } from "react";
+import { useHistory, Redirect, useParams } from "react-router";
 import toast from "react-hot-toast";
 import { MdOutlineArrowBack } from "react-icons/md";
-import MultiInput from "../../Components/MultiInput.js";
+import MultiInput from "../../Components/MultiInput/index.js";
 import MultiSelectTabs from "../../Components/MultiSelectTabs";
 import { skillList } from "../../Constants";
 import { FormContext, initialValues } from "../Layout/FormContext.js";
 import TextEditor from "../../Components/TextEditor/TextEditor.js";
 import { useQuery } from "react-query";
-import Alert from "../../Components/Alert/Alert.js";
-import { NewPost } from "./../../queries/PostQuery";
+import Alert from "../../Components/Alert/index.js";
+import { NewPost, GetPost, UpdatePost } from "./../../queries/PostQuery";
 import { HOME } from "../../routes.contants";
 
 // const validate = () => {};
 
 const PostForm = () => {
+  const { id } = useParams();
   const history = useHistory();
   const { formDetails, setFormDetails } = useContext(FormContext);
+
+  const { data: postData } = useQuery("get-post", () => GetPost(id), {
+    enabled: id !== undefined,
+  });
+
+  const { refetch: updateData } = useQuery(
+    "update-post",
+    () => UpdatePost(id, formDetails),
+    {
+      enabled: false,
+    }
+  );
+
+  useEffect(() => {
+    if (id && postData) {
+      const { title, description, tags } = postData;
+      setFormDetails({ ...formDetails, title, description, tags });
+    }
+    return () => {
+      setFormDetails(initialValues);
+    };
+  }, [postData, id, setFormDetails]);
 
   const onSuccess = (data) => {
     if (data.error) {
@@ -25,8 +48,17 @@ const PostForm = () => {
       toast.custom((t) => (
         <Alert t={t} message="Post created" type="success" />
       ));
-      setFormDetails(initialValues);
       <Redirect to={HOME} />;
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (isLoading) return;
+    if (id) {
+      updateData();
+    } else {
+      refetch();
     }
   };
 
@@ -39,12 +71,6 @@ const PostForm = () => {
       onSuccess,
     }
   );
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isLoading) return;
-    refetch();
-  };
 
   const setDescription = (description) => {
     setFormDetails({ ...formDetails, description });
@@ -112,7 +138,10 @@ const PostForm = () => {
               Description<span className="text-red-500">*</span>
             </label>
             <div className="w-full resize-y mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ">
-              <TextEditor setDescription={setDescription} />
+              <TextEditor
+                setDescription={setDescription}
+                content={postData ? postData.description : ""}
+              />
             </div>
           </div>
           <div className="mt-4">

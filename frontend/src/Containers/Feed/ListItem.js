@@ -20,7 +20,7 @@ const ListItem = ({ post, refetch }) => {
 
   return (
     <div className="w-full flex group dark:bg-coolGray-800 dark:text-coolGray-100">
-      <div className="container flex flex-row pl-4 pr-6 py-6 mx-auto dark:bg-coolGray-900">
+      <div className="container flex flex-row px-2 py-5 mx-auto dark:bg-coolGray-900">
         <div className="w-6 pt flex-shrink-0  flex flex-col items-center leading-none">
           <span
             onClick={like}

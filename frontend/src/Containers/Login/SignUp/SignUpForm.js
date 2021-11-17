@@ -1,14 +1,13 @@
 import React, { useState, useRef } from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
-import toast from "react-hot-toast";
 import SocialForm from "./SocialForm";
 import DetailsForm from "./DetailsForm";
 import SkillForm from "./SkillForm";
-import Alert from "../../../Components/Alert/Alert";
 import { TOKEN } from "../../../Constants";
 import { HOME } from "../../../routes.contants";
 import { signup } from "../../../queries/AuthQuery";
+import { ToastError, ToastSuccess } from "../../../Components/Toasts";
 
 const SignUpForm = ({ setSignup, setFormDetails, formDetails }) => {
   const [step, setStep] = useState(1);
@@ -17,13 +16,9 @@ const SignUpForm = ({ setSignup, setFormDetails, formDetails }) => {
 
   const onSuccess = (data) => {
     if (data.error) {
-      toast.custom((t) => (
-        <Alert t={t} message={data.error.msg} type="error" />
-      ));
+      ToastError({ message: data.error.msg });
     } else {
-      toast.custom((t) => (
-        <Alert t={t} message="Account registered" type="success" />
-      ));
+      ToastSuccess({ message: "Account registered" });
       localStorage.setItem(TOKEN, data.token);
       history.push(HOME);
     }

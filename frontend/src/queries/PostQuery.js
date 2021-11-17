@@ -23,6 +23,13 @@ export const GetPost = async (id) => {
   return data;
 };
 
+export const UpdatePost = async (id, value) => {
+  const data = await (
+    await fetch("http://localhost:5000/api/posts/update/" + id, createPutAuth())
+  ).json();
+  return data;
+};
+
 export const LikePost = async (id) => {
   const data = await (
     await fetch("http://localhost:5000/api/posts/like" + id, createPutAuth())

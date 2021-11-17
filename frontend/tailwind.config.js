@@ -11,6 +11,12 @@ module.exports = {
         logo2: ["Cormorant Garamond", "serif"],
         logoend: ["Architects Daughter", "serif"],
       },
+      colors: {
+        twitter: "#1DA1F2",
+        linkedin: "#0A66C2",
+        facebook: "#4867AA",
+        github: "#6e5494",
+      },
     },
   },
   variants: {
@@ -20,5 +26,8 @@ module.exports = {
       ringColor: ["hover", "active"],
     },
   },
-  plugins: [require("@tailwindcss/line-clamp")],
+  plugins: [
+    require("@tailwindcss/line-clamp"),
+    require("tailwind-scrollbar-hide"),
+  ],
 };

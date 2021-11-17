@@ -16,7 +16,7 @@ const Menu = () => {
         </Link>
         {Menuitems.map((item, index) => (
           <Link to={item.link} key={index}>
-            {item.link === location.pathname ? (
+            {location.pathname.startsWith(item.link) ? (
               <div className="w-full flex flex-nowrap gap-x-4 items-center py-4 px-6 mt-3 bg-gray-400 bg-opacity-10 ring-4 ring-gray-400 ring-opacity-10 transition-all duration-500 ease-in-out transform font-semibold rounded-full text-xl cursor-pointer">
                 {item.logo}
                 {item.name}

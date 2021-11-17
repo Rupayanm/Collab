@@ -42,7 +42,7 @@ export const createPostAuth = (value) => {
   };
 };
 
-export const createPutAuth = () => {
+export const createPutAuth = (value) => {
   const token = localStorage.getItem(TOKEN);
   return {
     method: "PUT",
@@ -50,5 +50,6 @@ export const createPutAuth = () => {
       "x-auth-token": token,
       "Content-Type": "application/json",
     },
+    body: JSON.stringify(value),
   };
 };

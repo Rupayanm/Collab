@@ -10,12 +10,21 @@ import "draft-js/dist/Draft.css";
 import "./editor.css";
 import { stateToHTML } from "draft-js-export-html";
 import DOMPurify from "dompurify";
+import { stateFromHTML } from "draft-js-import-html";
 
-const TextEditor = ({ setDescription }) => {
+const createState = (content) => {
+  return content
+    ? EditorState.createWithContent(stateFromHTML(content))
+    : EditorState.createEmpty();
+};
+
+const TextEditor = ({ setDescription, content = "" }) => {
   const size = 20;
-  const [editorState, setEditorState] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const [editorState, setEditorState] = useState(createState(content));
+
+  useEffect(() => {
+    setEditorState(createState(content));
+  }, [content]);
 
   useEffect(() => {
     const value = DOMPurify.sanitize(

@@ -1,7 +1,11 @@
-import React from "react";
+import React, { Suspense } from "react";
+import { Switch } from "react-router";
+import Loading from "../../Components/Loading";
 import Nav from "../Navbar/Nav";
+import { sidebarRoutes, contentRoutes, rightbarRoutes } from "../../routes";
+import { CustomRoute } from "../../CustomRoutes";
 
-const Layout = ({ Sidebar, Content, RightBar }) => {
+const Layout = () => {
   return (
     <>
       <div className=" flex flex-nowrap w-screen h-screen ">
@@ -12,11 +16,11 @@ const Layout = ({ Sidebar, Content, RightBar }) => {
           <div className="w-full h-auto">
             <Nav />
           </div>
-          <div className="w-full h-full flex-grow-1 flex flex-row overflow-y-scroll">
-            <div className="w-full md:w-4/6 ">
+          <div className="w-full h-full flex-grow-1 flex flex-row relative overflow-y-scroll">
+            <div className="w-full lg:w-4/6 ">
               <Content />
             </div>
-            <div className="md:w-2/6 h-full">
+            <div className="hidden w-2/6 sticky top-0 lg:block overflow-y-scroll scrollbar-hide">
               <RightBar />
             </div>
           </div>
@@ -25,5 +29,59 @@ const Layout = ({ Sidebar, Content, RightBar }) => {
     </>
   );
 };
+
+function Sidebar() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Switch>
+        {sidebarRoutes.map((route, index) => (
+          <CustomRoute
+            key={index}
+            path={route.path}
+            restricted={route.restricted}
+            exact={route.exact}
+            component={route.Sidebar}
+          />
+        ))}
+      </Switch>
+    </Suspense>
+  );
+}
+
+function Content() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Switch>
+        {contentRoutes.map((route, index) => (
+          <CustomRoute
+            key={index}
+            path={route.path}
+            restricted={route.restricted}
+            exact={route.exact}
+            component={route.Content}
+          />
+        ))}
+      </Switch>
+    </Suspense>
+  );
+}
+
+function RightBar() {
+  return (
+    <Suspense fallback={<Loading />}>
+      <Switch>
+        {rightbarRoutes.map((route, index) => (
+          <CustomRoute
+            key={index}
+            path={route.path}
+            restricted={route.restricted}
+            exact={route.exact}
+            component={route.RightBar}
+          />
+        ))}
+      </Switch>
+    </Suspense>
+  );
+}
 
 export default Layout;

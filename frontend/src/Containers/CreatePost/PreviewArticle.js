@@ -13,7 +13,7 @@ const PreviewArticle = () => {
           </h1>
         </div>
         <div className="dark:text-coolGray-100 break-words">
-          {parse(formDetails.description)}
+          {formDetails.description ? parse(formDetails.description) : ""}
         </div>
       </article>
       <div>

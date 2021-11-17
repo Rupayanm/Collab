@@ -1,25 +1,42 @@
 import React, { useRef } from "react";
-import { TOKEN } from "../../Constants";
+import { PROFILEKEY, TOKEN } from "../../Constants";
 import { useQuery } from "react-query";
 import { login } from "./../../queries/AuthQuery";
+import { GetProfile } from "./../../queries/ProfileQuery";
 import { useHistory } from "react-router-dom";
-import toast from "react-hot-toast";
-import Alert from "../../Components/Alert/Alert";
 import { HOME } from "./../../routes.contants";
 import { Audio } from "svg-loaders-react";
+import { ToastError } from "./../../Components/Toasts";
 
 const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
   const formRef = useRef(null);
   const history = useHistory();
 
+  const onSuccessProfile = (data) => {
+    if (data.error) {
+      ToastError({ message: data.error.msg });
+    } else {
+      localStorage.setItem(PROFILEKEY, data);
+      history.push(HOME);
+    }
+  };
+
+  const { refetch: getProfileInfo } = useQuery(
+    "getProfile",
+    () => GetProfile(),
+    {
+      enabled: false,
+      onSuccess: onSuccessProfile,
+      cacheTime: 500,
+    }
+  );
+
   const onSuccess = (data) => {
     if (data.error) {
-      toast.custom((t) => (
-        <Alert t={t} message={data.error.msg} type="error" />
-      ));
+      ToastError({ message: data.error.msg });
     } else {
       localStorage.setItem(TOKEN, data.token);
-      history.push(HOME);
+      getProfileInfo();
     }
   };
 

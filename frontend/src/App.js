@@ -1,16 +1,35 @@
 import React, { useEffect, Suspense } from "react";
 import Login from "./Containers/Login/Login";
-import { Switch, BrowserRouter, Redirect } from "react-router-dom";
+import { Switch, BrowserRouter, Redirect, Route } from "react-router-dom";
 import Layout from "./Containers/Layout/Layout";
-import { CustomRoute, PublicRoute } from "./CustomRoutes";
+import { PublicRoute } from "./CustomRoutes";
 import { FormProvider } from "./Containers/Layout/FormContext";
-import { routes } from "./routes";
 import Loading from "./Components/Loading/index";
-import { HOME } from "./routes.contants";
+import {
+  HOME,
+  EXPLORE,
+  CREATE,
+  EDIT,
+  PROFILE,
+  PROFILEEDIT,
+  NOTIFICATION,
+  ARTICLE,
+} from "./routes.contants";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
+
+const paths = [
+  HOME,
+  EXPLORE,
+  CREATE,
+  EDIT,
+  PROFILE,
+  PROFILEEDIT,
+  NOTIFICATION,
+  ARTICLE,
+];
 
 function App() {
   useEffect(() => {
@@ -25,7 +44,8 @@ function App() {
             <BrowserRouter>
               <Switch>
                 <PublicRoute exact path="/login" component={Login} />
-                {routes.map((route, index) => (
+                <Route path={paths} component={Layout} />
+                {/* {routes.map((route, index) => (
                   <CustomRoute
                     key={index}
                     path={route.path}
@@ -33,7 +53,7 @@ function App() {
                     exact={route.exact}
                     component={() => <Layout {...route} />}
                   />
-                ))}
+                ))} */}
                 <Redirect exact to={HOME} from={"/"} />
               </Switch>
             </BrowserRouter>

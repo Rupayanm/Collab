@@ -4,7 +4,7 @@ const Nav = () => {
   return (
     <>
       <div className=" border-b border-gray-300">
-        <div className="max-w-2xl flex flex-nowrap py-5 px-10 dark:bg-coolGray-800 dark:text-coolGray-100">
+        <div className="w-full lg:w-4/6 flex flex-nowrap py-5 px-10 dark:bg-coolGray-800 dark:text-coolGray-100">
           <input
             type="text"
             placeholder="Search"
