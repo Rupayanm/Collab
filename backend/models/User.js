@@ -13,12 +13,15 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  avatar: {
-    type: String,
+  images: {
+    type:{String}
   },
   date: {
     type: Date,
     default: Date.now,
+  },
+  notifications:{
+    type: {}
   },
   posts:{
     type:[mongoose.Schema.Types.ObjectId]

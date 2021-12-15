@@ -58,10 +58,10 @@ const Alert = ({ type = "basic", message, t }) => {
 
   return (
     <div
-      className="z-50 items-center lg:px-20 bg-white rounded-lg cursor-pointer"
+      className="z-50 bg-transparent items-center lg:px-20 rounded-lg cursor-pointer"
       onClick={() => toast.dismiss(t.id)}
     >
-      <div className={`w-full ${color} border rounded-lg shadow-xl`}>
+      <div className={` ${color} bg-white border rounded-lg shadow-xl`}>
         <div className="flex items-center justify-between pl-6 pr-2 py-2 mx-auto ">
           <div className="flex">
             <p className="text-sm font-semibold tracking-wide pr-8">

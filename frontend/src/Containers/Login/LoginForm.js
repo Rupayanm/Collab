@@ -1,29 +1,43 @@
-import React, { useRef } from "react";
-import { PROFILEKEY, TOKEN } from "../../Constants";
-import { useQuery } from "react-query";
-import { login } from "./../../queries/AuthQuery";
-import { GetProfile } from "./../../queries/ProfileQuery";
+import React from "react";
+import { useQuery, useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
-import { HOME } from "./../../routes.contants";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { Audio } from "svg-loaders-react";
-import { ToastError } from "./../../Components/Toasts";
+import { PROFILEKEY, TOKEN } from "../../Constants";
+import { login } from "./../../queries/AuthQuery";
+import { GetMyProfile } from "./../../queries/ProfileQuery";
+import { HOME } from "./../../routes.contants";
+import { ToastError, Input, BlackButton } from "./../../Components";
 
-const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
-  const formRef = useRef(null);
+const initialValues = {
+  email: "",
+  password: "",
+};
+
+const validationSchema = Yup.object({
+  email: Yup.string().email("Invalid email address").required("Required"),
+  password: Yup.string()
+    .min(8, "Must be more than 8 characters")
+    .max(20, "Must be 20 characters or less")
+    .required("Required"),
+});
+
+const LoginForm = ({ setSignup }) => {
   const history = useHistory();
 
   const onSuccessProfile = (data) => {
     if (data.error) {
       ToastError({ message: data.error.msg });
     } else {
-      localStorage.setItem(PROFILEKEY, data);
+      localStorage.setItem(PROFILEKEY, JSON.stringify(data));
       history.push(HOME);
     }
   };
 
-  const { refetch: getProfileInfo } = useQuery(
-    "getProfile",
-    () => GetProfile(),
+  const { refetch: getProfileInfo, isLoading: isLoadingProfile } = useQuery(
+    "getMyProfile",
+    GetMyProfile,
     {
       enabled: false,
       onSuccess: onSuccessProfile,
@@ -32,26 +46,38 @@ const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
   );
 
   const onSuccess = (data) => {
-    if (data.error) {
-      ToastError({ message: data.error.msg });
+    if (data.token === undefined || data.error) {
+      ToastError({ message: data.error ? data.error : "Invalid Token" });
     } else {
       localStorage.setItem(TOKEN, data.token);
       getProfileInfo();
     }
   };
 
-  const { isLoading, refetch } = useQuery("login", () => login(formDetails), {
-    enabled: false,
+  const loginQuery = useMutation((values) => login(values), {
     onSuccess,
-    cacheTime: 500,
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (isLoading) return;
-    if (formRef.current.reportValidity()) {
-      refetch();
+  const formik = useFormik({
+    initialValues,
+    onSubmit: (values) => loginQuery.mutate(values),
+    validationSchema,
+  });
+
+  const ButtonText = () => {
+    if (isLoadingProfile) {
+      return (
+        <>
+          <div className="text-sm font-semibold text-gray-200 text-center">
+            You will be redirected soon..
+          </div>
+        </>
+      );
     }
+    if (loginQuery.isLoading) {
+      return <Audio height={20} width={20} className="w-full mx-auto" />;
+    }
+    return <div>Log in</div>;
   };
 
   return (
@@ -60,36 +86,33 @@ const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
         <h1 className="mt-12 text-3xl font-semibold text-black tracking-ringtighter sm:text-3xl title-font">
           Log in to your account
         </h1>
-        <form className="mt-6" onSubmit={handleSubmit} ref={formRef}>
+        <form className="mt-6" onSubmit={formik.handleSubmit}>
           <div>
-            <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
+            <label className="block mb-1.5 text-sm font-medium leading-relaxed tracking-tighter ext-blueGray-700">
               Email Address
             </label>
-            <input
+            <Input
+              name="email"
               type="email"
               placeholder="Your Email "
-              value={formDetails.email}
-              required
-              onChange={(e) =>
-                setFormDetails({ ...formDetails, email: e.target.value })
-              }
-              className="w-full px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
+              value={formik.values.email}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.email}
             />
           </div>
           <div className="mt-4">
-            <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
+            <label className="block mb-1.5 text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
               Password
             </label>
-            <input
+            <Input
+              name="password"
               type="password"
               placeholder="Your Password"
-              value={formDetails.password}
-              required
-              minLength="8"
-              onChange={(e) =>
-                setFormDetails({ ...formDetails, password: e.target.value })
-              }
-              className="w-full px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              onBlur={formik.handleBlur}
+              error={formik.errors.password}
             />
           </div>
           <div className="mt-2 text-right">
@@ -97,16 +120,12 @@ const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
               Forgot Password?
             </p>
           </div>
-          <button
+          <BlackButton
             type="submit"
-            className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 "
+            disabled={loginQuery.isLoading || isLoadingProfile}
           >
-            {isLoading ? (
-              <Audio height={20} width={20} className="w-full mx-auto" />
-            ) : (
-              "Log in"
-            )}
-          </button>
+            <ButtonText />
+          </BlackButton>
         </form>
         <hr className="w-full my-6 border-blueGray-300" />
         <div className="flex justify-center">
@@ -155,6 +174,7 @@ const LoginForm = ({ setSignup, setFormDetails, formDetails }) => {
             </div>
           </button>
         </div>
+
         <div className="mt-8 text-center flex justify-between">
           <p> Need an account? </p>
           <p

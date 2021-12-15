@@ -1,6 +1,6 @@
 import {
   createGet,
-  //   createGetAuth,
+  createGetAuth,
   createPostAuth,
   //   createPost,
 } from "../requests.config";
@@ -15,16 +15,16 @@ export const UpdateProfile = async (values) => {
   return data;
 };
 
-export const GetProfile = async () => {
+export const GetProfile = async (id) => {
   const data = await (
-    await fetch("http://localhost:5000/api/profile", createGet())
+    await fetch("http://localhost:5000/api/profile/" + id, createGet())
   ).json();
   return data;
 };
 
 export const GetMyProfile = async () => {
   const data = await (
-    await fetch("http://localhost:5000/api/profile/me", createGet())
+    await fetch("http://localhost:5000/api/profile/me", createGetAuth())
   ).json();
   return data;
 };

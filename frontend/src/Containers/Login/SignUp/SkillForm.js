@@ -1,20 +1,9 @@
 import React from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { skillList } from "../../../Constants";
-import MultiSelectTabs from "../../../Components/MultiSelectTabs";
+import { MultiSelectTabs } from "../../../Components";
 
-const SkillForm = ({ setFormDetails, formDetails, setStep }) => {
-  const removeSkill = (value) => {
-    let skills = formDetails.skills.filter((item) => item !== value);
-    setFormDetails({ ...formDetails, skills });
-  };
-
-  const addSkill = (value) => {
-    let skills = formDetails.skills;
-    skills.push(value);
-    setFormDetails({ ...formDetails, skills });
-  };
-
+const SkillForm = ({ formik, setStep }) => {
   return (
     <>
       <div>
@@ -22,16 +11,16 @@ const SkillForm = ({ setFormDetails, formDetails, setStep }) => {
           Skills
         </label>
         <MultiSelectTabs
+          formik={formik}
           options={skillList}
-          selected={formDetails.skills}
-          addItem={addSkill}
-          removeItem={removeSkill}
+          selected={formik.values.skills}
+          name="skills"
         />
       </div>
       <div className="inline-flex w-full">
         <div
           onClick={() => setStep(1)}
-          className="block px-4 py-3 mt-6 font-semibold border transition duration-500 ease-in-out transform bg-white rounded-l-lg rounded- hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 "
+          className="flex items-center px-4 py-3 mt-6 font-semibold border transition duration-500 ease-in-out transform bg-white rounded-l-lg rounded- hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 "
         >
           <FaChevronLeft />
         </div>

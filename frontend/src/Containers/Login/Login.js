@@ -3,13 +3,6 @@ import LoginForm from "./LoginForm";
 import SignUpForm from "./SignUp/SignUpForm";
 
 const Login = () => {
-  const [formDetails, setFormDetails] = useState({
-    name: "",
-    email: "",
-    skills: [],
-    password: "",
-    socials: { github: "", twitter: "", facebook: "", linkedin: "" },
-  });
   const [signup, setSignup] = useState(false);
 
   return (
@@ -24,17 +17,9 @@ const Login = () => {
         </div>
         <div className="flex items-center justify-center w-full h-screen px-6 bg-white md:max-w-md lg:max-w-full md:mx-auto md:w-1/2 xl:w-1/3 lg:px-16 xl:px-12">
           {signup ? (
-            <SignUpForm
-              setSignup={setSignup}
-              formDetails={formDetails}
-              setFormDetails={setFormDetails}
-            />
+            <SignUpForm setSignup={setSignup} />
           ) : (
-            <LoginForm
-              setSignup={setSignup}
-              formDetails={formDetails}
-              setFormDetails={setFormDetails}
-            />
+            <LoginForm setSignup={setSignup} />
           )}
         </div>
       </section>

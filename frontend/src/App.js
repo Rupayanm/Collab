@@ -3,7 +3,6 @@ import Login from "./Containers/Login/Login";
 import { Switch, BrowserRouter, Redirect, Route } from "react-router-dom";
 import Layout from "./Containers/Layout/Layout";
 import { PublicRoute } from "./CustomRoutes";
-import { FormProvider } from "./Containers/Layout/FormContext";
 import Loading from "./Components/Loading/index";
 import {
   HOME,
@@ -39,26 +38,15 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <FormProvider>
-          <Suspense fallback={<Loading />}>
-            <BrowserRouter>
-              <Switch>
-                <PublicRoute exact path="/login" component={Login} />
-                <Route path={paths} component={Layout} />
-                {/* {routes.map((route, index) => (
-                  <CustomRoute
-                    key={index}
-                    path={route.path}
-                    restricted={route.restricted}
-                    exact={route.exact}
-                    component={() => <Layout {...route} />}
-                  />
-                ))} */}
-                <Redirect exact to={HOME} from={"/"} />
-              </Switch>
-            </BrowserRouter>
-          </Suspense>
-        </FormProvider>
+        <Suspense fallback={<Loading />}>
+          <BrowserRouter>
+            <Switch>
+              <PublicRoute exact path="/login" component={Login} />
+              <Route path={paths} component={Layout} />
+              <Redirect exact to={HOME} from={"/"} />
+            </Switch>
+          </BrowserRouter>
+        </Suspense>
       </QueryClientProvider>
       <Toaster position="bottom-center" reverseOrder={false} />
     </>

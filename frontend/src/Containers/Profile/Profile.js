@@ -10,7 +10,7 @@ import { PROFILEEDIT, PROFILE } from "../../routes.contants";
 
 const Profile = () => {
   const location = useLocation();
-  const { data: posts, refetch } = useQuery("feed", getFeed);
+  const { data: posts, refetch } = useQuery("feed", () => getFeed(1, 50));
 
   return (
     <>

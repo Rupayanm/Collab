@@ -32,9 +32,11 @@ router.post(
       if (!isMatch) {
         return res.status(200).json({ error: { msg: "Invalid Password" } });
       }
+      
       const payload = {
         user: {
           id: user.id,
+          name:user.name,
         },
       };
       jwt.sign(

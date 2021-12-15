@@ -11,7 +11,7 @@ import {
 } from "./routes.contants";
 
 const PostForm = lazy(() => import("./Containers/CreatePost/PostForm"));
-const Menu = lazy(() => import("./Containers/Sidebar/Menu"));
+const Menu = lazy(() => import("./Containers/Sidebar/Menu/Menu"));
 const Article = lazy(() => import("./Containers/Article/Article"));
 const Feed = lazy(() => import("./Containers/Feed/FeedList"));
 const Profile = lazy(() => import("./Containers/Profile/Profile"));

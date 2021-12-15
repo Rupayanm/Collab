@@ -32,14 +32,14 @@ export const UpdatePost = async (id, value) => {
 
 export const LikePost = async (id) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/like" + id, createPutAuth())
+    await fetch("http://localhost:5000/api/posts/like/" + id, createPutAuth())
   ).json();
   return data;
 };
 
 export const DislikePost = async (id) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/unlike" + id, createPutAuth())
+    await fetch("http://localhost:5000/api/posts/unlike/" + id, createPutAuth())
   ).json();
   return data;
 };

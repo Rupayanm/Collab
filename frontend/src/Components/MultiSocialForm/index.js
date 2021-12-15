@@ -1,22 +1,26 @@
 import React, { useState } from "react";
+import Input from "../Input";
 import { socialList } from "../../Constants";
 
-const MultiSocialForm = ({ setFormDetails, formDetails }) => {
-  const [social, setSocial] = useState("github");
+const MultiSocialForm = (props) => {
+  const { formik, name, label = true, defaultValue = "github" } = props;
+
+  const [social, setSocial] = useState(defaultValue);
 
   const updateSocial = (value) => {
-    const socialUrls = { ...formDetails.socials, [social]: value };
-    setFormDetails({ ...formDetails, socials: socialUrls });
-    console.log();
+    const socialUrls = { ...formik.values[name], [social]: value };
+    formik.setFieldValue(name, socialUrls);
   };
 
   return (
     <>
       <div className="w-full">
-        {/* <label className="block w-full mb-2 pb-2 text-md font-medium leading-relaxed tracking-tighter text-blueGray-700 ">
-          Socials
-        </label> */}
-        <div className="w-full flex flex-nowrap justify-evenly gap-x-3 gap-y-2 text-black text-lg">
+        {label && (
+          <label className="block w-full mb-2 pb-2 text-md font-medium leading-relaxed tracking-tighter text-blueGray-700 ">
+            Socials
+          </label>
+        )}
+        <div className="w-full mb-5 flex flex-nowrap justify-evenly gap-x-3 gap-y-2 text-gray-500 text-lg">
           {socialList.map((item, index) => (
             <div key={index}>
               {item.name !== social ? (
@@ -37,12 +41,11 @@ const MultiSocialForm = ({ setFormDetails, formDetails }) => {
             </div>
           ))}
         </div>
-        <input
+        <Input
           type="url"
-          value={formDetails.socials[social]}
+          value={formik.values.socials[social]}
           onChange={(e) => updateSocial(e.target.value)}
           placeholder={`Your ${social} url`}
-          className="w-full px-4 py-2 mt-4 text-base border border-gray-100 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:border-gray-500 focus:shadow-outline focus:ring-2 ring-offset-current ring-gray-300"
         />
       </div>
     </>

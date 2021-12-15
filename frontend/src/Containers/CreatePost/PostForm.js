@@ -1,105 +1,64 @@
 import React, { useContext, useEffect } from "react";
-import { useHistory, Redirect, useParams } from "react-router";
-import toast from "react-hot-toast";
+import { useHistory, useParams } from "react-router";
+import { useQuery, useMutation } from "react-query";
 import { MdOutlineArrowBack } from "react-icons/md";
-import MultiInput from "../../Components/MultiInput/index.js";
-import MultiSelectTabs from "../../Components/MultiSelectTabs";
 import { skillList } from "../../Constants";
-import { FormContext, initialValues } from "../Layout/FormContext.js";
-import TextEditor from "../../Components/TextEditor/TextEditor.js";
-import { useQuery } from "react-query";
-import Alert from "../../Components/Alert/index.js";
+import { FormContext } from "../Layout/FormContext.js";
 import { NewPost, GetPost, UpdatePost } from "./../../queries/PostQuery";
 import { HOME } from "../../routes.contants";
-
-// const validate = () => {};
+import {
+  MultiInput,
+  MultiSelectTabs,
+  TextEditor,
+  ToastSuccess,
+} from "../../Components";
 
 const PostForm = () => {
   const { id } = useParams();
   const history = useHistory();
-  const { formDetails, setFormDetails } = useContext(FormContext);
+  const {
+    formDetails,
+    setInitialValue,
+    setTitle,
+    setDescription,
+    addTag,
+    removeTag,
+    addLink,
+    removeLink,
+  } = useContext(FormContext);
 
   const { data: postData } = useQuery("get-post", () => GetPost(id), {
     enabled: id !== undefined,
   });
 
-  const { refetch: updateData } = useQuery(
-    "update-post",
-    () => UpdatePost(id, formDetails),
-    {
-      enabled: false,
-    }
-  );
-
   useEffect(() => {
-    if (id && postData) {
-      const { title, description, tags } = postData;
-      setFormDetails({ ...formDetails, title, description, tags });
-    }
-    return () => {
-      setFormDetails(initialValues);
-    };
-  }, [postData, id, setFormDetails]);
+    setInitialValue(postData);
+  }, [postData]);
 
   const onSuccess = (data) => {
     if (data.error) {
-      console.log(error);
+      console.log(data.error);
     } else {
-      toast.custom((t) => (
-        <Alert t={t} message="Post created" type="success" />
-      ));
-      <Redirect to={HOME} />;
+      ToastSuccess({ message: "Post Created" });
+      history.push(HOME);
     }
   };
+
+  const updatePostQuery = useMutation(() => UpdatePost(id, formDetails), {
+    onSuccess,
+  });
+
+  const createPostQuery = useMutation(() => NewPost(formDetails), {
+    onSuccess,
+  });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (isLoading) return;
     if (id) {
-      updateData();
+      updatePostQuery.mutate();
     } else {
-      refetch();
+      createPostQuery.mutate();
     }
-  };
-
-  const { isLoading, error, refetch } = useQuery(
-    "create-post",
-    () => NewPost(formDetails),
-    {
-      enabled: false,
-      cacheTime: 0,
-      onSuccess,
-    }
-  );
-
-  const setDescription = (description) => {
-    setFormDetails({ ...formDetails, description });
-  };
-
-  const removeLink = (index) => {
-    let links = formDetails.links;
-    links.splice(index, 1);
-    setFormDetails({ ...formDetails, links });
-  };
-
-  const addLink = (value) => {
-    if (value === "") {
-      return;
-    }
-    let links = formDetails.links;
-    links.push(value);
-    setFormDetails({ ...formDetails, links });
-  };
-
-  const removeTag = (value) => {
-    let tags = formDetails.tags.filter((item) => item !== value);
-    setFormDetails({ ...formDetails, tags });
-  };
-
-  const addTag = (value) => {
-    let tags = formDetails.tags;
-    tags.push(value);
-    setFormDetails({ ...formDetails, tags });
   };
 
   return (
@@ -124,9 +83,7 @@ const PostForm = () => {
               placeholder="Title.. "
               maxLength="120"
               value={formDetails.title}
-              onChange={(e) =>
-                setFormDetails({ ...formDetails, title: e.target.value })
-              }
+              onChange={(e) => setTitle(e.target.value)}
               className="w-full px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
             />
             <div className="text-xs text-gray-500 text-right pt-1.5 px-1.5">
@@ -150,8 +107,8 @@ const PostForm = () => {
             </label>
             <MultiSelectTabs
               options={skillList}
-              addItem={addTag}
-              removeItem={removeTag}
+              addTag={addTag}
+              removeTag={removeTag}
               selected={formDetails.tags}
             />
           </div>

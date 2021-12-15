@@ -1,41 +1,46 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
 import { BsCaretUp, BsCaretDown } from "react-icons/bs";
 import parse from "html-react-parser";
-import { useQuery } from "react-query";
+import { useMutation } from "react-query";
 import { LikePost, DislikePost } from "./../../queries/PostQuery";
 
 const ListItem = ({ post, refetch }) => {
-  const { refetch: like } = useQuery("like-post", () => LikePost(post._id), {
-    enabled: false,
-  });
-  const { refetch: dislike } = useQuery(
-    "dislike-post",
-    () => DislikePost(post._id),
-    {
-      enabled: false,
+  const [vote, setVote] = useState(0);
+
+  const like = useMutation(() => LikePost(post._id));
+
+  const dislike = useMutation(() => DislikePost(post._id));
+
+  const ratePost = (value) => {
+    setVote(vote === value ? 0 : value);
+    if (value === 1) {
+      like.mutate();
+    } else {
+      dislike.mutate();
     }
-  );
+  };
 
   return (
     <div className="w-full flex group dark:bg-coolGray-800 dark:text-coolGray-100">
       <div className="container flex flex-row px-2 py-5 mx-auto dark:bg-coolGray-900">
         <div className="w-6 pt flex-shrink-0  flex flex-col items-center leading-none">
           <span
-            onClick={like}
-            className={
-              "w-full text-gray-400  text-opacity-75 transition-all duration-300 hover:text-green-500 cursor-pointer mx-auto"
-            }
+            onClick={() => ratePost(1)}
+            className={`w-full text-opacity-75 transition-all duration-300 hover:text-green-500 cursor-pointer mx-auto ${
+              vote === 1 ? "text-green-500" : "text-gray-400"
+            }`}
           >
             <BsCaretUp size={25} className="mx-auto" />
           </span>
           <p className="text-xs text-gray-500 font-semibold text-center">
-            {post.likes.length}
+            {post.likesCounter + vote}
           </p>
           <span
-            onClick={dislike}
-            className="w-full text-gray-400 text-opacity-75 transition-all duration-300 hover:text-red-500 cursor-pointer mx-auto"
+            onClick={() => ratePost(-1)}
+            className={`w-full text-opacity-75 transition-all duration-300 hover:text-red-500 cursor-pointer mx-auto 
+                ${vote === -1 ? "text-red-500" : "text-gray-400"}`}
           >
             <BsCaretDown className="mx-auto" size={25} />
           </span>

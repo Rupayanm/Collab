@@ -24,13 +24,16 @@ const PostSchema = new mongoose.Schema({
     type: [],
     required: true,
   },
-  likes: [
-    {
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-      },
-    },
-  ],
+  likes: {
+    type:Object
+  },
+  dislikes: {
+    type:Object
+  },
+  likesCounter:{
+    type:Number,
+    default:0
+  },
   comments: [
     {
       user: {
@@ -53,5 +56,8 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  images:{
+    type:[],
+  }
 });
 module.exports = Post = mongoose.model("post", PostSchema);

@@ -23,18 +23,12 @@ const Article = () => {
   // const currentuser = "demo";
 
   const onError = (data) => {
-    console.log(error, "hello");
     ToastError({ message: data.msg });
   };
 
-  const { status, error, isLoading, data } = useQuery(
-    "create-post",
-    () => GetPost(id),
-    {
-      onError,
-    }
-  );
-  console.log(status, error, data);
+  const { isLoading, data } = useQuery("get-post", () => GetPost(id), {
+    onError,
+  });
 
   if (isLoading) {
     return (
