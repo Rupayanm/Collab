@@ -8,7 +8,7 @@ const Nav = () => {
           <input
             type="text"
             placeholder="Search"
-            className="w-full px-4 py-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline"
+            className="w-full px-4 py-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline"
             required
           />
         </div>

@@ -1,23 +1,25 @@
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import { useQuery, useMutation } from "react-query";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { skillList } from "../../Constants";
-import { FormContext } from "../Layout/FormContext.js";
+import { useFormContext } from "../Layout/FormContext.js";
 import { NewPost, GetPost, UpdatePost } from "./../../queries/PostQuery";
 import { HOME } from "../../routes.contants";
 import {
   MultiInput,
   MultiSelectTabs,
-  TextEditor,
+  // TextEditor,
   ToastSuccess,
 } from "../../Components";
+import ArticleEditor from "./ArticleEditor";
 
 const PostForm = () => {
   const { id } = useParams();
   const history = useHistory();
   const {
-    formDetails,
+    value: formDetails,
+    resetValue,
     setInitialValue,
     setTitle,
     setDescription,
@@ -25,14 +27,20 @@ const PostForm = () => {
     removeTag,
     addLink,
     removeLink,
-  } = useContext(FormContext);
+  } = useFormContext();
 
-  const { data: postData } = useQuery("get-post", () => GetPost(id), {
-    enabled: id !== undefined,
+  const { data: postData } = useQuery(["get-post", id], () => GetPost(id), {
+    enabled: Boolean(id),
   });
 
   useEffect(() => {
-    setInitialValue(postData);
+    if (postData) {
+      setInitialValue(postData);
+    } else {
+      resetValue();
+    }
+    return resetValue;
+    //eslint-disable-next-line
   }, [postData]);
 
   const onSuccess = (data) => {
@@ -65,7 +73,7 @@ const PostForm = () => {
     <div className=" w-full h-screen relative py-10  dark:bg-coolGray-800 dark:text-coolGray-100 overflow-x-hidden">
       <div
         onClick={() => history.goBack()}
-        className="w-min z-10 backdrop-filter backdrop-blur-sm fixed top-10 left-8 p-1.5 border border-gray-300 rounded-full hover:border-gray-500 focus:bg-gray-500 "
+        className="w-min z-10 backdrop-blur-lg bg-white bg-opacity-75 fixed top-10 left-8 p-1.5 border border-gray-300 rounded-full hover:border-gray-500 focus:bg-gray-500 cursor-pointer"
       >
         <MdOutlineArrowBack size={25} className="pointer-events-none" />
       </div>
@@ -84,7 +92,7 @@ const PostForm = () => {
               maxLength="120"
               value={formDetails.title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
+              className="w-full px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
             />
             <div className="text-xs text-gray-500 text-right pt-1.5 px-1.5">
               {formDetails.title.length}/120
@@ -94,11 +102,14 @@ const PostForm = () => {
             <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
               Description<span className="text-red-500">*</span>
             </label>
-            <div className="w-full resize-y mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ">
-              <TextEditor
+            <div
+            // className="w-full resize-y mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
+            >
+              {/* <TextEditor
                 setDescription={setDescription}
                 content={postData ? postData.description : ""}
-              />
+              /> */}
+              <ArticleEditor onChange={setDescription} />
             </div>
           </div>
           <div className="mt-4">

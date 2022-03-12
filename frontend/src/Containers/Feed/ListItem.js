@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
 import { BsCaretUp, BsCaretDown } from "react-icons/bs";
-import parse from "html-react-parser";
+import DOMPurify from "dompurify";
 import { useMutation } from "react-query";
 import { LikePost, DislikePost } from "./../../queries/PostQuery";
 
@@ -25,7 +25,7 @@ const ListItem = ({ post, refetch }) => {
   return (
     <div className="w-full flex group dark:bg-coolGray-800 dark:text-coolGray-100">
       <div className="container flex flex-row px-2 py-5 mx-auto dark:bg-coolGray-900">
-        <div className="w-6 pt flex-shrink-0  flex flex-col items-center leading-none">
+        <div className="w-6 pt shrink-0  flex flex-col items-center leading-none">
           <span
             onClick={() => ratePost(1)}
             className={`w-full text-opacity-75 transition-all duration-300 hover:text-green-500 cursor-pointer mx-auto ${
@@ -55,13 +55,16 @@ const ListItem = ({ post, refetch }) => {
                 {post.title}
               </p>
             </Link>
-            <div className="mt-2 max-h-30 child-ellipsis">
-              {post.description ? parse(post.description) : null}
-            </div>
+            <div
+              className="mt-2 max-h-30 child-ellipsis"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(post.description),
+              }}
+            ></div>
           </div>
-          <div className="flex items-center justify-between mt-4">
+          <div className="flex items-center justify-between mt-3">
             <Link to={`/post/${post._id}`}>
-              <p className="flex flex-nowrap gap-2 font-semibold items-center text-purple-700 cursor-pointer dark:text-emerald-400">
+              <p className="flex flex-nowrap gap-2 font-semibold items-center text-purple-700 cursor-pointer ">
                 Read more
                 <FiArrowRight className="transition-transform transform group-hover:translate-x-2" />
               </p>

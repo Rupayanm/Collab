@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
-import Dropzone, { useDropzone } from "react-dropzone";
+import { useDropzone } from "react-dropzone";
 
 function DropzoneInput() {
-  const [images, setImages] = useState([]);
+  const [, setImages] = useState([]);
 
   const onDrop = useCallback((acceptedFiles) => {
     // Do something with the files

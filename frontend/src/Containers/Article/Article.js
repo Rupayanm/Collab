@@ -5,7 +5,7 @@ import { FiEdit } from "react-icons/fi";
 import { GetPost } from "../../queries/PostQuery";
 import { ToastError } from "../../Components/Toasts";
 import { useHistory, useParams, Link } from "react-router-dom";
-import parse from "html-react-parser";
+import DOMPurify from "dompurify";
 import Loading from "./../../Components/Loading/index";
 
 const colors = [
@@ -71,14 +71,17 @@ const Article = () => {
               />
               <p className="text-sm">Leroy Jenkins • July 19th, 2021</p>
             </div>
-            <p className="flex-shrink-0 mt-3 text-sm md:mt-0">
+            <p className="shrink-0 mt-3 text-sm md:mt-0">
               {data?.views ? data.views : 0} views
             </p>
           </div>
         </div>
-        <div className=" pb-3 dark:text-coolGray-100">
-          {data?.description ? parse(data.description) : null}
-        </div>
+        <div
+          className=" pb-3 dark:text-coolGray-100"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(data.description),
+          }}
+        ></div>
       </article>
       <div>
         <div className="flex flex-wrap py-6 space-x-2 border-t border-dashed dark:border-coolGray-400">
@@ -86,7 +89,7 @@ const Article = () => {
             data.tags.map((item, index) => (
               <p
                 key={index}
-                className={`px-3 py-1 cursor-pointer  text-white border border-gray-300 rounded-lg hover:underline dark:bg-emerald-400 dark:text-coolGray-900 ${
+                className={`px-3 py-1 cursor-pointer  text-white border border-gray-300 rounded-lg hover:underline dark:bg-emerald-400 dark:text-coolGray-900 capitalize ${
                   colors[index % colors.length]
                 }`}
               >

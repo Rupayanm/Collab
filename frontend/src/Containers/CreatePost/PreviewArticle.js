@@ -1,9 +1,9 @@
-import React, { useContext } from "react";
-import parse from "html-react-parser";
-import { FormContext } from "../Layout/FormContext";
+import React from "react";
+import { useFormContext } from "../Layout/FormContext";
+import DOMPurify from "dompurify";
 
 const PreviewArticle = () => {
-  const { formDetails } = useContext(FormContext);
+  const { value: formDetails } = useFormContext();
   return (
     <div className="max-w-2xl p-10 space-y-12">
       <article className="space-y-6 dark:bg-coolGray-800 dark:text-coolGray-50">
@@ -12,16 +12,19 @@ const PreviewArticle = () => {
             {formDetails.title ? formDetails.title : "This is a demo title!!!"}
           </h1>
         </div>
-        <div className="dark:text-coolGray-100 break-words">
-          {formDetails.description ? parse(formDetails.description) : ""}
-        </div>
+        <div
+          className="dark:text-coolGray-100 break-words prose lg:prose-md"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(formDetails.description),
+          }}
+        ></div>
       </article>
       <div>
         <div className="flex flex-wrap py-6 space-x-2 border-t border-dashed dark:border-coolGray-400">
           {formDetails.tags.map((item, index) => (
             <p
               key={index}
-              className="px-3 py-1 cursor-pointer border border-gray-300 rounded-lg hover:underline dark:bg-emerald-400 dark:text-coolGray-900"
+              className="px-3 py-1 cursor-pointer border border-gray-300 rounded-lg hover:underline  dark:text-coolGray-900 capitalize"
             >
               {item}
             </p>

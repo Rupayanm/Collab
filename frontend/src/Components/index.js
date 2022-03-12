@@ -10,7 +10,6 @@ import {
   ToastInfo,
 } from "./Toasts";
 import MultiSocialForm from "./MultiSocialForm";
-import TextEditor from "./TextEditor/TextEditor";
 import BlackButton from "./Button/BlackButton";
 import DropzoneInput from "./Dropzone/index";
 import Alert from "./Alert";
@@ -29,5 +28,4 @@ export {
   ToastError,
   ToastSuccess,
   ToastWarning,
-  TextEditor,
 };

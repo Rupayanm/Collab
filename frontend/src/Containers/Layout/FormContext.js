@@ -1,4 +1,4 @@
-import React, { useState, createContext } from "react";
+import React, { createContext, useReducer, useContext } from "react";
 
 export const FormContext = createContext();
 
@@ -9,60 +9,109 @@ export const initialValues = {
   description: "",
 };
 
+const actionTypes = {
+  reset: "RESET",
+  set_initial: "SET_INITIAL",
+  set_title: "SET_TITLE",
+  set_description: "SET_DESCRIPTION",
+  add_tag: "ADD_TAG",
+  remove_tag: "REMOVE_TAG",
+  add_link: "ADD_LINK",
+  remove_link: "REMOVE_LINK",
+};
+
+const formReducer = (state, action) => {
+  switch (action.type) {
+    case actionTypes.reset:
+      return initialValues;
+
+    case actionTypes.set_initial:
+      return { ...initialValues, ...action.payload };
+
+    case actionTypes.set_title: {
+      return { ...state, title: action.payload };
+    }
+
+    case actionTypes.set_description:
+      return { ...state, description: action.payload };
+
+    case actionTypes.add_tag:
+      return { ...state, tags: [...state.tags, action.payload] };
+
+    case actionTypes.remove_tag:
+      return {
+        ...state,
+        tags: state.tags.filter((item) => item !== action.payload),
+      };
+
+    case actionTypes.add_link:
+      return { ...state, links: [...state.links, action.payload] };
+
+    case actionTypes.remove_link: {
+      const links = state.links;
+      links.splice(action.payload, 1);
+      return { ...state, links };
+    }
+
+    default:
+      throw new Error("Action Type not found in useFormContext reducer");
+  }
+};
+
 export const FormProvider = (props) => {
-  const [formDetails, setFormDetails] = useState(initialValues);
-
-  const resetValue = () => {
-    setFormDetails(initialValues);
-  };
-
-  const setInitialValue = (data) => {
-    setFormDetails({ ...initialValues, ...data });
-  };
-
-  const setTitle = (title) => {
-    setFormDetails({ ...formDetails, title });
-  };
-
-  const setDescription = (description) => {
-    setFormDetails({ ...formDetails, description });
-  };
-
-  const addTag = (value) => {
-    setFormDetails({ ...formDetails, tags: [...formDetails.tags, value] });
-  };
-
-  const removeTag = (value) => {
-    const tags = formDetails.tags;
-    tags.filter((item) => item !== value);
-    setFormDetails({ ...formDetails, tags });
-  };
-
-  const addLink = (value) => {
-    setFormDetails({ ...formDetails, links: [...formDetails.links, value] });
-  };
-
-  const removeLink = (index) => {
-    const links = formDetails.links;
-    links.splice(index, 1);
-    setFormDetails({ ...formDetails, links });
-  };
+  const [value, dispatch] = useReducer(formReducer, initialValues);
 
   return (
-    <FormContext.Provider
-      value={{
-        formDetails,
-        resetValue,
-        setInitialValue,
-        setTitle,
-        setDescription,
-        addLink,
-        removeLink,
-        addTag,
-        removeTag,
-      }}
-    >
+    <FormContext.Provider value={[value, dispatch]}>
       {props.children}
     </FormContext.Provider>
   );
+};
+
+export const useFormContext = () => {
+  const [value, dispatch] = useContext(FormContext);
+
+  const resetValue = () => {
+    dispatch({ type: actionTypes.reset });
+  };
+
+  const setInitialValue = (data) => {
+    dispatch({ type: actionTypes.set_initial, payload: data });
+  };
+
+  const setTitle = (title) => {
+    dispatch({ type: actionTypes.set_title, payload: title });
+  };
+
+  const setDescription = (description) => {
+    dispatch({ type: actionTypes.set_description, payload: description });
+  };
+
+  const addTag = (value) => {
+    dispatch({ type: actionTypes.add_tag, payload: value.toLowerCase() });
+  };
+
+  const removeTag = (value) => {
+    dispatch({ type: actionTypes.remove_tag, payload: value.toLowerCase() });
+  };
+
+  const addLink = (value) => {
+    dispatch({ type: actionTypes.add_link, payload: value });
+  };
+
+  const removeLink = (index) => {
+    dispatch({ type: actionTypes.remove_link, payload: index });
+  };
+
+  return {
+    value,
+    resetValue,
+    setInitialValue,
+    setTitle,
+    setDescription,
+    addTag,
+    removeTag,
+    addLink,
+    removeLink,
+  };
 };
