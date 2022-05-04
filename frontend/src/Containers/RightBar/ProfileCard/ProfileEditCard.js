@@ -84,7 +84,7 @@ const ProfileEditCard = () => {
           <Input
             name="designation"
             type="text"
-            placeholder="Your bio"
+            placeholder=""
             value={formik.values.designation}
             onChange={formik.handleChange}
           />
@@ -98,7 +98,7 @@ const ProfileEditCard = () => {
             placeholder="Your bio"
             value={formik.values.about}
             onChange={formik.handleChange}
-            className="w-full h-36 resize-none px-4 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform border-transparent rounded-lg bg-blueGray-100 focus:border-gray-500 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-gray-300 "
+            className="w-full h-36 resize-none px-3 py-2 mt-2 text-base border border-gray-300 text-black transition duration-500 ease-in-out transform rounded-lg bg-blueGray-100 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 "
           />
         </div>
         {/* <div className="flex flex-row flex-nowrap justify-center divide-x-2 divide-gray-400 mx-4 mb-6"></div> */}

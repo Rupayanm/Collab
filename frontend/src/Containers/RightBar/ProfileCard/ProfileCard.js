@@ -30,7 +30,7 @@ const ProfileCard = () => {
     <>
       <div className=" m-2 rounded-xl border border-gray-300 scrollbar-hide">
         <div className="py-4 h-32 flex items-center relative">
-          <div className="rounded-r-2xl z-10 h-24 w-28 bg-green-300 overflow-hidden">
+          <div className="rounded-xl ml-3 z-10 h-[5.5rem] w-28  overflow-hidden">
             <img
               src={profileData?.avatar}
               alt="profile"

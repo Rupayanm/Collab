@@ -7,6 +7,7 @@ import { ToastError } from "../../Components/Toasts";
 import { useHistory, useParams, Link } from "react-router-dom";
 import DOMPurify from "dompurify";
 import Loading from "./../../Components/Loading/index";
+import { GETPOST } from "./../../queries/PostQuery";
 
 const colors = [
   "bg-red-500",
@@ -20,13 +21,12 @@ const colors = [
 const Article = () => {
   const history = useHistory();
   const { id } = useParams();
-  // const currentuser = "demo";
 
   const onError = (data) => {
     ToastError({ message: data.msg });
   };
 
-  const { isLoading, data } = useQuery("get-post", () => GetPost(id), {
+  const { isLoading, data } = useQuery([GETPOST, id], () => GetPost(id), {
     onError,
   });
 

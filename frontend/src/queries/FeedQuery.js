@@ -3,6 +3,7 @@ import { createGet, createGetAuth } from "../requests.config";
 
 const token = localStorage.getItem(TOKEN);
 
+export const GETFEED = "GET_FEED";
 export const getFeed = async (page = 1, limit = 50) => {
   if (token) {
     const data = await (

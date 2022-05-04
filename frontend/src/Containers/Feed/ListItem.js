@@ -1,20 +1,38 @@
-import React, { useState } from "react";
+import React from "react";
+import { useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
 import { BsCaretUp, BsCaretDown } from "react-icons/bs";
 import DOMPurify from "dompurify";
 import { useMutation } from "react-query";
 import { LikePost, DislikePost } from "./../../queries/PostQuery";
+import dayjs from "dayjs";
+import RelativeTime from "dayjs/plugin/relativeTime";
+import { GETFEED } from "./../../queries/FeedQuery";
 
-const ListItem = ({ post, refetch }) => {
-  const [vote, setVote] = useState(0);
+dayjs.extend(RelativeTime);
 
-  const like = useMutation(() => LikePost(post._id));
+const getTime = (time) => {
+  if (dayjs().isSame(time, "month")) {
+    return dayjs(time).fromNow();
+  } else if (dayjs().isSame(time, "month")) {
+    return dayjs(time).format("MMM DD");
+  }
+  return dayjs(time).format("MMM DD, YY");
+};
 
-  const dislike = useMutation(() => DislikePost(post._id));
+const ListItem = ({ post }) => {
+  const queryClient = useQueryClient();
+
+  const like = useMutation(() => LikePost(post._id), {
+    onSuccess: () => queryClient.invalidateQueries(GETFEED),
+  });
+
+  const dislike = useMutation(() => DislikePost(post._id), {
+    onSuccess: () => queryClient.invalidateQueries(GETFEED),
+  });
 
   const ratePost = (value) => {
-    setVote(vote === value ? 0 : value);
     if (value === 1) {
       like.mutate();
     } else {
@@ -29,27 +47,31 @@ const ListItem = ({ post, refetch }) => {
           <span
             onClick={() => ratePost(1)}
             className={`w-full text-opacity-75 transition-all duration-300 hover:text-green-500 cursor-pointer mx-auto ${
-              vote === 1 ? "text-green-500" : "text-gray-400"
+              post?.hasLiked === 1 ? "text-green-500" : "text-gray-400"
             }`}
           >
             <BsCaretUp size={25} className="mx-auto" />
           </span>
           <p className="text-xs text-gray-500 font-semibold text-center">
-            {post.likesCounter + vote}
+            {post.likesCounter}
           </p>
           <span
             onClick={() => ratePost(-1)}
             className={`w-full text-opacity-75 transition-all duration-300 hover:text-red-500 cursor-pointer mx-auto 
-                ${vote === -1 ? "text-red-500" : "text-gray-400"}`}
+                ${
+                  (post?.hasLiked === 1) === -1
+                    ? "text-red-500"
+                    : "text-gray-400"
+                }`}
           >
             <BsCaretDown className="mx-auto" size={25} />
           </span>
         </div>
         <div className="flex-grow pl-4">
           <div className="flex items-center justify-between">
-            <span className="text-sm dark:text-coolGray-400">Jun 1, 2020</span>
+            <span className="text-sm text-gray-500">{getTime(post.date)}</span>
           </div>
-          <div className="mt-2">
+          <div className="mt-0.5">
             <Link to={`/post/${post._id}`}>
               <p className="text-2xl font-bold truncate cursor-pointer">
                 {post.title}

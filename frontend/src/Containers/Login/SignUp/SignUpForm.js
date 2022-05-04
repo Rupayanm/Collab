@@ -55,8 +55,9 @@ const SignUpForm = ({ setSignup }) => {
   );
 
   const onSuccess = (data) => {
-    if (data.token === undefined || data.error) {
-      ToastError({ message: "Sign Up Failed" || data.error.msg });
+    console.log(data);
+    if (data.token === undefined || data.errors) {
+      ToastError({ message: "Sign Up Failed" || data.errors[0].msg });
     } else {
       ToastSuccess({ message: "Account registered" });
       localStorage.setItem(TOKEN, data.token);
@@ -75,7 +76,7 @@ const SignUpForm = ({ setSignup }) => {
   });
 
   return (
-    <div className="w-full h-100 relative">
+    <div className="relative w-full h-100">
       <h1 className="mt-12 text-3xl font-semibold text-black tracking-ringtighter sm:text-3xl title-font">
         Sign Up
       </h1>
@@ -93,10 +94,10 @@ const SignUpForm = ({ setSignup }) => {
       </form>
       <hr className="w-full my-6 border-blueGray-300" />
 
-      <div className="mt-8 text-center flex justify-between">
+      <div className="flex justify-between mt-8 text-center">
         <p> Already have an account? </p>
         <p
-          className="font-semibold cursor-pointer text-blue-500 hover:text-blue-700"
+          className="font-semibold text-blue-500 cursor-pointer hover:text-blue-700"
           onClick={() => {
             setSignup(false);
           }}

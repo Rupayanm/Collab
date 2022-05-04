@@ -8,7 +8,10 @@ import {
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import { BiBold, BiStrikethrough } from "react-icons/bi";
-import { FiItalic, FiUnderline } from "react-icons/fi";
+import {
+  FiItalic,
+  //  FiUnderline
+} from "react-icons/fi";
 import { FaHeading } from "react-icons/fa";
 import { MdFormatListBulleted } from "react-icons/md";
 import { FaQuoteLeft } from "react-icons/fa";
@@ -51,7 +54,7 @@ const ArticleEditor = ({ onChange }) => {
     <div>
       {editor && (
         <BubbleMenu
-          className="bg-white bg-opacity-80 backdrop-blur-md flex no-wrap border border-gray-400 rounded-lg p-1 gap-x-1"
+          className="flex p-1 bg-white border border-gray-400 rounded-lg backdrop-blur-md no-wrap gap-x-1"
           tippyOptions={{ duration: 100 }}
           editor={editor}
         >
@@ -77,7 +80,7 @@ const ArticleEditor = ({ onChange }) => {
           >
             <FiItalic />
           </button>
-          <button
+          {/* <button
             type="button"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
             className={`p-1 rounded hover:bg-gray-200 cursor-pointer focus:outline-none focus:bg-gray-300 ${
@@ -87,7 +90,7 @@ const ArticleEditor = ({ onChange }) => {
             }`}
           >
             <FiUnderline />
-          </button>
+          </button> */}
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleStrike().run()}
@@ -115,7 +118,7 @@ const ArticleEditor = ({ onChange }) => {
 
       {editor && (
         <FloatingMenu
-          className="bg-white flex no-wrap border border-gray-400 rounded-lg p-1 gap-x-1"
+          className="flex p-1 bg-white border border-gray-400 rounded-lg no-wrap gap-x-1"
           tippyOptions={{ duration: 100 }}
           editor={editor}
         >
