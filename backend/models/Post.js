@@ -25,14 +25,14 @@ const PostSchema = new mongoose.Schema({
     required: true,
   },
   likes: {
-    type:Object
+    type: Object,
   },
   dislikes: {
-    type:Object
+    type: Object,
   },
-  likesCounter:{
-    type:Number,
-    default:0
+  likesCounter: {
+    type: Number,
+    default: 0,
   },
   comments: [
     {
@@ -56,8 +56,8 @@ const PostSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  images:{
-    type:[],
-  }
+  images: {
+    type: [],
+  },
 });
 module.exports = Post = mongoose.model("post", PostSchema);
