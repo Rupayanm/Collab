@@ -1,5 +1,5 @@
 import React from "react";
-import { Input } from "../../../Components";
+import { Input } from "../../../components";
 
 const DetailsForm = ({ setStep, formik }) => {
   const nextPage = () => {

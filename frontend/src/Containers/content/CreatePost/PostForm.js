@@ -2,16 +2,16 @@ import React, { useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import { useQuery, useMutation } from "react-query";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { skillList } from "../../Constants";
-import { useFormContext } from "../Layout/FormContext.js";
-import { NewPost, GetPost, UpdatePost } from "./../../queries/PostQuery";
-import { HOME } from "../../routes.contants";
+import { skillList } from "../../../Constants";
+import { useFormContext } from "../../../context/FormContext";
+import { NewPost, GetPost, UpdatePost } from "../../../queries/PostQuery";
+import { HOME } from "../../../routes/routes.contants";
 import {
   MultiInput,
   MultiSelectTabs,
   // TextEditor,
   ToastSuccess,
-} from "../../Components";
+} from "../../../components";
 import ArticleEditor from "./ArticleEditor";
 
 const PostForm = () => {

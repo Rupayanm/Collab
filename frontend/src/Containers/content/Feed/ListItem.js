@@ -10,11 +10,11 @@ import {
 } from "react-icons/bs";
 import DOMPurify from "dompurify";
 import { useMutation } from "react-query";
-import { LikePost, DislikePost } from "./../../queries/PostQuery";
+import { LikePost, DislikePost } from "../../../queries/PostQuery";
 import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime";
-import { GETFEED } from "./../../queries/FeedQuery";
-import { TOKEN } from "./../../Constants";
+import { GETFEED } from "../../../queries/FeedQuery";
+import { TOKEN } from "../../../Constants";
 
 dayjs.extend(RelativeTime);
 

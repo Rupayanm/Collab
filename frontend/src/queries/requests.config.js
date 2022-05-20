@@ -1,4 +1,4 @@
-import { TOKEN } from "./Constants";
+import { TOKEN } from "../Constants";
 
 export const createGet = () => {
   return {

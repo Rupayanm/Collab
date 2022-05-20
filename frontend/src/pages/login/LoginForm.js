@@ -5,10 +5,10 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Audio } from "svg-loaders-react";
 import { PROFILEKEY, TOKEN } from "../../Constants";
-import { login } from "./../../queries/AuthQuery";
-import { GetMyProfile } from "./../../queries/ProfileQuery";
-import { HOME } from "./../../routes.contants";
-import { ToastError, Input, BlackButton } from "./../../Components";
+import { login } from "../../queries/AuthQuery";
+import { GetMyProfile } from "../../queries/ProfileQuery";
+import { HOME } from "../../routes/routes.contants";
+import { ToastError, Input, BlackButton } from "../../components";
 
 const initialValues = {
   email: "",

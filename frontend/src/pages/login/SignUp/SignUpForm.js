@@ -7,10 +7,10 @@ import SocialForm from "./SocialForm";
 import DetailsForm from "./DetailsForm";
 import SkillForm from "./SkillForm";
 import { TOKEN, PROFILEKEY } from "../../../Constants";
-import { HOME } from "../../../routes.contants";
+import { HOME } from "../../../routes/routes.contants";
 import { signup } from "../../../queries/AuthQuery";
 import { GetMyProfile } from "../../../queries/ProfileQuery";
-import { ToastError, ToastSuccess } from "../../../Components/Toasts";
+import { ToastError, ToastSuccess } from "../../../components/Toasts";
 
 const initialValues = {
   name: "",

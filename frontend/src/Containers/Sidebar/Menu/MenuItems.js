@@ -2,7 +2,7 @@ import { RiHomeLine } from "react-icons/ri";
 import { GiCubeforce } from "react-icons/gi";
 import { AiOutlineUser } from "react-icons/ai";
 // import { IoMdNotificationsOutline } from "react-icons/io";
-import { HOME, EXPLORE } from "../../../routes.contants";
+import { HOME, EXPLORE } from "../../../routes/routes.contants";
 
 export const Menuitems = [
   { name: "Home", link: HOME, logo: <RiHomeLine size={24} /> },

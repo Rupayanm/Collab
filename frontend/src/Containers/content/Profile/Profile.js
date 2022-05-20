@@ -1,12 +1,12 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "react-query";
-import ListItem from "./../Feed/ListItem";
-import { getFeed } from "../../queries/FeedQuery";
+import ListItem from "../Feed/ListItem";
+import { getFeed } from "../../../queries/FeedQuery";
 import { FiSettings } from "react-icons/fi";
-import ProfileCard from "./../RightBar/ProfileCard/ProfileCard";
-import ProfileEditCard from "./../RightBar/ProfileCard/ProfileEditCard";
-import { PROFILEEDIT, PROFILE } from "../../routes.contants";
+import ProfileCard from "../../rightbar/ProfileCard/ProfileCard";
+import ProfileEditCard from "../../rightbar/ProfileCard/ProfileEditCard";
+import { PROFILEEDIT, PROFILE } from "../../../routes/routes.contants";
 
 const Profile = () => {
   const location = useLocation();

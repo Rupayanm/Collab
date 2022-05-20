@@ -2,12 +2,12 @@ import React from "react";
 import { useQuery } from "react-query";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { FiEdit } from "react-icons/fi";
-import { GetPost } from "../../queries/PostQuery";
-import { ToastError } from "../../Components/Toasts";
+import { GetPost } from "../../../queries/PostQuery";
+import { ToastError } from "../../../components/Toasts";
 import { useHistory, useParams, Link } from "react-router-dom";
 import DOMPurify from "dompurify";
-import Loading from "./../../Components/Loading/index";
-import { GETPOST } from "./../../queries/PostQuery";
+import Loading from "../../../components/Loading/index";
+import { GETPOST } from "../../../queries/PostQuery";
 
 const colors = [
   "bg-red-500",

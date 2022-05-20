@@ -3,7 +3,7 @@ import {
   createGetAuth,
   createPostAuth,
   //   createPost,
-} from "../requests.config";
+} from "./requests.config";
 
 export const UPDATEPROFILE = "UPDATE_PROFILE";
 export const UpdateProfile = async (values) => {

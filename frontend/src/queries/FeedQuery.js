@@ -1,5 +1,5 @@
 import { TOKEN } from "./../Constants";
-import { createGet, createGetAuth } from "../requests.config";
+import { createGet, createGetAuth } from "./requests.config";
 
 const token = localStorage.getItem(TOKEN);
 

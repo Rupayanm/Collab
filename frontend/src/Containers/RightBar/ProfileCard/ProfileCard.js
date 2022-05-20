@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { GetProfile, GetMyProfile } from "../../../queries/ProfileQuery";
 import { socialList } from "../../../Constants";
-import { Loading } from "../../../Components";
+import { Loading } from "../../../components";
 
 // const data = {
 //   name: "Subhajit Mandal",

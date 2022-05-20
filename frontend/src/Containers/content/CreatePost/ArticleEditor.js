@@ -15,7 +15,7 @@ import {
 import { FaHeading } from "react-icons/fa";
 import { MdFormatListBulleted } from "react-icons/md";
 import { FaQuoteLeft } from "react-icons/fa";
-import { useFormContext } from "../Layout/FormContext";
+import { useFormContext } from "../../../context/FormContext";
 
 const ArticleEditor = ({ onChange }) => {
   const { value: formDetails } = useFormContext();

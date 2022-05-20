@@ -4,7 +4,7 @@ import {
   createPostAuth,
   createPutAuth,
   //   createPost,
-} from "../requests.config";
+} from "./requests.config";
 
 export const NEWPOST = "NEW_POST";
 export const NewPost = async (values) => {

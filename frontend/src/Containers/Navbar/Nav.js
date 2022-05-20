@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { TOKEN, PROFILEKEY } from "./../../Constants";
+import { TOKEN, PROFILEKEY } from "../../Constants";
 // import useLocalStorage from "../../hooks/useLocalStorage";
 // import useDropdown from "../../hooks/useDropdown";\
-import { LOGIN } from "./../../routes.contants";
+import { LOGIN } from "../../routes/routes.contants";
 
 const Nav = () => {
   const [token, setToken] = useState(localStorage.getItem(TOKEN));

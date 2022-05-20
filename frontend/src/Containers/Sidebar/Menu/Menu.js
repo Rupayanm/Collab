@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Menuitems } from "./MenuItems";
-import { CREATE, HOME } from "../../../routes.contants";
+import { CREATE, HOME } from "../../../routes/routes.contants";
 
 const Menu = () => {
   const location = useLocation();

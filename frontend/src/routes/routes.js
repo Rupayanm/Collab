@@ -10,22 +10,24 @@ import {
   PROFILEEDIT,
 } from "./routes.contants";
 
-const PostForm = lazy(() => import("./Containers/CreatePost/PostForm"));
-const Menu = lazy(() => import("./Containers/Sidebar/Menu/Menu"));
-const Article = lazy(() => import("./Containers/Article/Article"));
-const Feed = lazy(() => import("./Containers/Feed/FeedList"));
-const Profile = lazy(() => import("./Containers/Profile/Profile"));
+const PostForm = lazy(() =>
+  import("../containers/content/CreatePost/PostForm")
+);
+const Menu = lazy(() => import("../containers/sidebar/Menu/Menu"));
+const Article = lazy(() => import("../containers/content/Article/Article"));
+const Feed = lazy(() => import("../containers/content/Feed/FeedList"));
+const Profile = lazy(() => import("../containers/content/Profile/Profile"));
 const NotificationBar = lazy(() =>
-  import("./Containers/RightBar/Notification/NotificationBar")
+  import("../containers/rightbar/Notification/NotificationBar")
 );
 const ProfileCard = lazy(() =>
-  import("./Containers/RightBar/ProfileCard/ProfileCard")
+  import("../containers/rightbar/ProfileCard/ProfileCard")
 );
 const ProfileEditCard = lazy(() =>
-  import("./Containers/RightBar/ProfileCard/ProfileEditCard")
+  import("../containers/rightbar/ProfileCard/ProfileEditCard")
 );
 const PreviewArticle = lazy(() =>
-  import("./Containers/CreatePost/PreviewArticle")
+  import("../containers/content/CreatePost/PreviewArticle")
 );
 
 export const sidebarRoutes = [
@@ -146,54 +148,5 @@ export const rightbarRoutes = [
   {
     path: "/",
     RightBar: NotificationBar,
-  },
-];
-
-export const routes = [
-  {
-    path: CREATE,
-    restricted: true,
-    exact: true,
-    Sidebar: () => <PostForm />,
-    Content: () => <PreviewArticle />,
-    RightBar: () => null,
-  },
-  {
-    path: EDIT,
-    restricted: true,
-    exact: true,
-    Sidebar: () => <PostForm />,
-    Content: () => <PreviewArticle />,
-    RightBar: () => null,
-  },
-  {
-    path: HOME,
-    Sidebar: () => <Menu />,
-    Content: () => <Feed />,
-    RightBar: () => <NotificationBar />,
-  },
-  {
-    path: ARTICLE,
-    Sidebar: () => <Menu />,
-    Content: () => <Article />,
-    RightBar: () => null,
-  },
-  {
-    path: EXPLORE,
-    Sidebar: () => <Menu />,
-    Content: () => null,
-    RightBar: () => <NotificationBar />,
-  },
-  // {
-  //   path: NOTIFICATION,
-  //   Sidebar: () => <Menu />,
-  //   Content: () => null,
-  // },
-  {
-    path: PROFILE,
-    restricted: true,
-    Sidebar: () => <Menu />,
-    Content: () => <Profile />,
-    RightBar: () => <ProfileCard />,
   },
 ];

@@ -10,7 +10,7 @@ import {
   DropzoneInput,
   Input,
   Loading,
-} from "../../../Components";
+} from "../../../components";
 
 // const data = {
 //   name: "Subhajit Mandal",

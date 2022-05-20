@@ -2,8 +2,8 @@ import React from "react";
 import ListItem from "./ListItem";
 // import { posts } from "../../demo/posts";
 import { useQuery } from "react-query";
-import { getFeed, GETFEED } from "../../queries/FeedQuery";
-import { TOKEN } from "../../Constants";
+import { getFeed, GETFEED } from "../../../queries/FeedQuery";
+import { TOKEN } from "../../../Constants";
 
 const Feed = () => {
   const token = localStorage.getItem(TOKEN);
