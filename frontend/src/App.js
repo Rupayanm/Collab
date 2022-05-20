@@ -15,6 +15,7 @@ import {
   ARTICLE,
 } from "./routes.contants";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ function App() {
             </Switch>
           </BrowserRouter>
         </Suspense>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
       <Toaster position="bottom-center" reverseOrder={false} />
     </>

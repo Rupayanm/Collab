@@ -2,13 +2,19 @@ import React from "react";
 import { useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import { FiArrowRight } from "react-icons/fi";
-import { BsCaretUp, BsCaretDown } from "react-icons/bs";
+import {
+  BsCaretUp,
+  BsCaretDown,
+  // BsBookmark,
+  // BsBookmarkFill,
+} from "react-icons/bs";
 import DOMPurify from "dompurify";
 import { useMutation } from "react-query";
 import { LikePost, DislikePost } from "./../../queries/PostQuery";
 import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime";
 import { GETFEED } from "./../../queries/FeedQuery";
+import { TOKEN } from "./../../Constants";
 
 dayjs.extend(RelativeTime);
 
@@ -23,13 +29,14 @@ const getTime = (time) => {
 
 const ListItem = ({ post }) => {
   const queryClient = useQueryClient();
+  const token = localStorage.getItem(TOKEN);
 
   const like = useMutation(() => LikePost(post._id), {
-    onSuccess: () => queryClient.invalidateQueries(GETFEED),
+    onSuccess: () => queryClient.invalidateQueries([GETFEED, token]),
   });
 
   const dislike = useMutation(() => DislikePost(post._id), {
-    onSuccess: () => queryClient.invalidateQueries(GETFEED),
+    onSuccess: () => queryClient.invalidateQueries([GETFEED, token]),
   });
 
   const ratePost = (value) => {
@@ -66,6 +73,17 @@ const ListItem = ({ post }) => {
           >
             <BsCaretDown className="mx-auto" size={25} />
           </span>
+          {/* <span
+            onClick={() => ratePost(-1)}
+            className={`w-full text-opacity-75 transition-all duration-300 hover:text-gray-700 cursor-pointer md:mt-auto md:mb-1
+                ${post?.isBookmarked ? "text-gray-400" : "text-gray-500"}`}
+          >
+            {post?.isBookmarked ? (
+              <BsBookmark className="mx-auto" size={18} />
+            ) : (
+              <BsBookmarkFill className="mx-auto" size={18} />
+            )}
+          </span> */}
         </div>
         <div className="flex-grow pl-4">
           <div className="flex items-center justify-between">

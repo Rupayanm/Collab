@@ -3,9 +3,12 @@ import ListItem from "./ListItem";
 // import { posts } from "../../demo/posts";
 import { useQuery } from "react-query";
 import { getFeed, GETFEED } from "../../queries/FeedQuery";
+import { TOKEN } from "../../Constants";
 
 const Feed = () => {
-  const { data } = useQuery([GETFEED], () => getFeed(1, 50), {
+  const token = localStorage.getItem(TOKEN);
+
+  const { data } = useQuery([GETFEED, token], () => getFeed(1, 50), {
     keepPreviousData: true,
   });
 

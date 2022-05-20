@@ -8,7 +8,7 @@ export const getFeed = async (page = 1, limit = 50) => {
   if (token) {
     const data = await (
       await fetch(
-        `http://localhost:5000/api/feed/publicfeed?page=${page}&limit=${limit}`,
+        `http://localhost:5000/api/feed/privatefeed?page=${page}&limit=${limit}`,
         createGet()
       )
     ).json();
