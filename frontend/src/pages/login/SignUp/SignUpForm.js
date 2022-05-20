@@ -6,11 +6,11 @@ import * as Yup from "yup";
 import SocialForm from "./SocialForm";
 import DetailsForm from "./DetailsForm";
 import SkillForm from "./SkillForm";
-import { TOKEN, PROFILEKEY } from "../../../Constants";
 import { HOME } from "../../../routes/routes.contants";
 import { signup } from "../../../queries/AuthQuery";
 import { GetMyProfile } from "../../../queries/ProfileQuery";
 import { ToastError, ToastSuccess } from "../../../components/Toasts";
+import { useAuth } from "../../../context/AuthContext";
 
 const initialValues = {
   name: "",
@@ -33,13 +33,14 @@ const validationSchema = Yup.object({
 
 const SignUpForm = ({ setSignup }) => {
   const [step, setStep] = useState(1);
+  const { setUser, setToken } = useAuth();
   const history = useHistory();
 
   const onSuccessProfile = (data) => {
     if (data.error) {
       ToastError({ message: data.error.msg });
     } else {
-      localStorage.setItem(PROFILEKEY, JSON.stringify(data));
+      setUser(JSON.stringify(data));
       history.push(HOME);
     }
   };
@@ -55,12 +56,11 @@ const SignUpForm = ({ setSignup }) => {
   );
 
   const onSuccess = (data) => {
-    console.log(data);
     if (data.token === undefined || data.errors) {
       ToastError({ message: "Sign Up Failed" || data.errors[0].msg });
     } else {
       ToastSuccess({ message: "Account registered" });
-      localStorage.setItem(TOKEN, data.token);
+      setToken(data.token);
       getProfileInfo();
     }
   };

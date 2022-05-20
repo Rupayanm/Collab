@@ -9,7 +9,7 @@ export const getFeed = async (page = 1, limit = 50) => {
     const data = await (
       await fetch(
         `http://localhost:5000/api/feed/privatefeed?page=${page}&limit=${limit}`,
-        createGet()
+        createGetAuth()
       )
     ).json();
     return data;
@@ -17,7 +17,7 @@ export const getFeed = async (page = 1, limit = 50) => {
     const data = await (
       await fetch(
         `http://localhost:5000/api/feed/publicfeed?page=${page}&limit=${limit}`,
-        createGetAuth()
+        createGet()
       )
     ).json();
     return data;

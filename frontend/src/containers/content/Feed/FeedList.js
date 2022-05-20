@@ -9,11 +9,11 @@ const Feed = () => {
   const token = localStorage.getItem(TOKEN);
 
   const { data } = useQuery([GETFEED, token], () => getFeed(1, 50), {
-    keepPreviousData: true,
+    onError: (error) => console.log(error),
   });
 
   return (
-    <div className="w-full px-4 grid grid-cols-1 divide-y divide-gray-200 ">
+    <div className="grid w-full grid-cols-1 px-4 divide-y divide-gray-200 ">
       {data &&
         Array.isArray(data.feed) &&
         data.feed.map((post, index) => <ListItem key={index} post={post} />)}

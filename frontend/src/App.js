@@ -17,6 +17,7 @@ import {
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "./context/AuthContext";
 
 const queryClient = new QueryClient();
 
@@ -39,15 +40,17 @@ function App() {
   return (
     <>
       <QueryClientProvider client={queryClient}>
-        <Suspense fallback={<Loading />}>
-          <BrowserRouter>
-            <Switch>
-              <PublicRoute exact path="/login" component={Login} />
-              <Route path={paths} component={Layout} />
-              <Redirect exact to={HOME} from={"/"} />
-            </Switch>
-          </BrowserRouter>
-        </Suspense>
+        <AuthProvider>
+          <Suspense fallback={<Loading />}>
+            <BrowserRouter>
+              <Switch>
+                <PublicRoute exact path="/login" component={Login} />
+                <Route path={paths} component={Layout} />
+                <Redirect exact to={HOME} from={"/"} />
+              </Switch>
+            </BrowserRouter>
+          </Suspense>
+        </AuthProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
       <Toaster position="bottom-center" reverseOrder={false} />

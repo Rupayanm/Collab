@@ -4,11 +4,11 @@ import { useHistory } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Audio } from "svg-loaders-react";
-import { PROFILEKEY, TOKEN } from "../../Constants";
 import { login } from "../../queries/AuthQuery";
 import { GetMyProfile } from "../../queries/ProfileQuery";
 import { HOME } from "../../routes/routes.contants";
 import { ToastError, Input, BlackButton } from "../../components";
+import { useAuth } from "../../context/AuthContext";
 
 const initialValues = {
   email: "",
@@ -25,12 +25,14 @@ const validationSchema = Yup.object({
 
 const LoginForm = ({ setSignup }) => {
   const history = useHistory();
+  const { setUser, setToken } = useAuth();
 
   const onSuccessProfile = (data) => {
     if (data.error) {
       ToastError({ message: data.error.msg });
     } else {
-      localStorage.setItem(PROFILEKEY, JSON.stringify(data));
+      console.log(data);
+      setUser(JSON.stringify(data));
       history.push(HOME);
     }
   };
@@ -49,7 +51,7 @@ const LoginForm = ({ setSignup }) => {
     if (data.token === undefined || data.error) {
       ToastError({ message: data.error ? data.error : "Invalid Token" });
     } else {
-      localStorage.setItem(TOKEN, data.token);
+      setToken(data.token);
       getProfileInfo();
     }
   };
@@ -68,7 +70,7 @@ const LoginForm = ({ setSignup }) => {
     if (isLoadingProfile) {
       return (
         <>
-          <div className="text-sm font-semibold text-gray-200 text-center">
+          <div className="text-sm font-semibold text-center text-gray-200">
             You will be redirected soon..
           </div>
         </>
@@ -116,7 +118,7 @@ const LoginForm = ({ setSignup }) => {
             />
           </div>
           <div className="mt-2 text-right">
-            <p className="text-sm cursor-pointer font-semibold leading-relaxed text-blueGray-700 hover:text-black focus:text-blue-700">
+            <p className="text-sm font-semibold leading-relaxed cursor-pointer text-blueGray-700 hover:text-black focus:text-blue-700">
               Forgot Password?
             </p>
           </div>
@@ -131,7 +133,7 @@ const LoginForm = ({ setSignup }) => {
         <div className="flex justify-center">
           <button
             type="button"
-            className="inline-flex w-full px-4 py-3 justify-center font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-black hover:text-white focus:outline-none focus:shadow-outline focus:ring-2  "
+            className="inline-flex justify-center w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-black hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 "
           >
             <div className="flex items-center justify-center">
               <svg
@@ -175,10 +177,10 @@ const LoginForm = ({ setSignup }) => {
           </button>
         </div>
 
-        <div className="mt-8 text-center flex justify-between">
+        <div className="flex justify-between mt-8 text-center">
           <p> Need an account? </p>
           <p
-            className="font-semibold cursor-pointer text-blue-500 hover:text-blue-700"
+            className="font-semibold text-blue-500 cursor-pointer hover:text-blue-700"
             onClick={() => setSignup(true)}
           >
             Sign Up
