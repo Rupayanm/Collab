@@ -1,9 +1,9 @@
 import React, { useEffect, Suspense } from "react";
-import Login from "./Containers/Login/Login";
+import Login from "./pages/login/Login";
 import { Switch, BrowserRouter, Redirect, Route } from "react-router-dom";
-import Layout from "./Containers/Layout/Layout";
-import { PublicRoute } from "./CustomRoutes";
-import Loading from "./Components/Loading/index";
+import Layout from "./pages/layout/Layout";
+import { PublicRoute } from "./routes/CustomRoutes";
+import Loading from "./components/Loading/index";
 import {
   HOME,
   EXPLORE,
@@ -13,8 +13,9 @@ import {
   PROFILEEDIT,
   NOTIFICATION,
   ARTICLE,
-} from "./routes.contants";
+} from "./routes/routes.contants";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { Toaster } from "react-hot-toast";
 
 const queryClient = new QueryClient();
@@ -47,6 +48,7 @@ function App() {
             </Switch>
           </BrowserRouter>
         </Suspense>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
       <Toaster position="bottom-center" reverseOrder={false} />
     </>

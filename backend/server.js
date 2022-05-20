@@ -5,13 +5,13 @@ const app = express();
 const Post = require("./models/Post");
 const User = require("./models/User");
 const config = require("config");
-const path = require('path');
-const crypto = require('crypto');
-const mongoose = require('mongoose');
-const multer = require('multer');
-const {GridFsStorage} = require('multer-gridfs-storage');
-const Grid = require('gridfs-stream');
-const methodOverride = require('method-override');
+const path = require("path");
+const crypto = require("crypto");
+const mongoose = require("mongoose");
+const multer = require("multer");
+const { GridFsStorage } = require("multer-gridfs-storage");
+const Grid = require("gridfs-stream");
+const methodOverride = require("method-override");
 // connect Database
 connectDB();
 
@@ -38,7 +38,7 @@ app.use("/api/search", require("./routes/api/search"));
 
 app.use("/api/feed", require("./routes/api/feed"));
 
-app.use("/api/upload",require("./routes/api/upload"))
+app.use("/api/upload", require("./routes/api/upload"));
 
 app.get("/", (req, res) => res.send("API Running"));
 

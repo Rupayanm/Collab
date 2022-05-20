@@ -1,4 +1,4 @@
-import { createPost } from "../requests.config";
+import { createPost } from "./requests.config";
 
 export const login = async (formDetails) => {
   const data = await (
