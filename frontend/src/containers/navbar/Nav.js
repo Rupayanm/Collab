@@ -11,7 +11,7 @@ const Nav = () => {
   return (
     <>
       <div className="flex border-b border-gray-300">
-        <div className="flex w-full px-10 py-5 lg:w-4/6 flex-nowrap dark:bg-coolGray-800 dark:text-coolGray-100">
+        <div className="flex w-full px-5 py-5 lg:w-4/6 flex-nowrap dark:bg-coolGray-800 dark:text-coolGray-100">
           <input
             type="text"
             placeholder="Search"

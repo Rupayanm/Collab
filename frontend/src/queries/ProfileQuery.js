@@ -31,3 +31,25 @@ export const GetMyProfile = async () => {
   ).json();
   return data;
 };
+
+export const GETPROFILEFEED = "GET_PROFILE_FEED";
+export const GetProfileFeed = async (id = "", page = 1, limit = 50) => {
+  const data = await (
+    await fetch(
+      `http://localhost:5000/api/profile/profilePosts/${id}?page=${page}&limit=${limit}`,
+      createGetAuth()
+    )
+  ).json();
+  return data;
+};
+
+export const GETMYPROFILEFEED = "GETMYPROFILEFEED";
+export const GetMyProfileFeed = async (page = 1, limit = 50) => {
+  const data = await (
+    await fetch(
+      `http://localhost:5000/api/profile/profilePosts/me?page=${page}&limit=${limit}`,
+      createGetAuth()
+    )
+  ).json();
+  return data;
+};

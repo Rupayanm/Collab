@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams, useHistory } from "react-router-dom";
 import { useQuery } from "react-query";
 import ListItem from "../Feed/ListItem";
 // import { getFeed } from "../../../queries/FeedQuery";
@@ -7,11 +7,24 @@ import { FiSettings } from "react-icons/fi";
 import ProfileCard from "../../rightbar/ProfileCard/ProfileCard";
 import ProfileEditCard from "../../rightbar/ProfileCard/ProfileEditCard";
 import { PROFILEEDIT, PROFILE } from "../../../routes/routes.contants";
+import {
+  GETPROFILEFEED,
+  GetProfileFeed,
+} from "./../../../queries/ProfileQuery";
+import { useAuth } from "../../../context/AuthContext";
 
 const Profile = () => {
+  const { id } = useParams();
+  const { user } = useAuth();
+  const history = useHistory();
   const location = useLocation();
-  const { data: posts, refetch } = useQuery("feed", () => {});
-  console.log(location);
+  const { data, refetch } = useQuery([GETPROFILEFEED], () =>
+    GetProfileFeed(id ?? user?._id)
+  );
+
+  if (!(id || user?._id)) {
+    history.goBack();
+  }
 
   return (
     <>
@@ -40,10 +53,9 @@ const Profile = () => {
           )}
         </div>
         <div className="grid w-full grid-cols-1 px-1 divide-y divide-gray-200 ">
-          {Array.isArray(posts) &&
-            posts.map((post, index) => (
-              <ListItem post={post} key={index} refetch={refetch} />
-            ))}
+          {data?.posts?.map((post, index) => (
+            <ListItem post={post} key={index} refetch={refetch} />
+          ))}
         </div>
       </div>
     </>

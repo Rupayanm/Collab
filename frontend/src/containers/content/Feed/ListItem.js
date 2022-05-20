@@ -40,7 +40,7 @@ const ListItem = ({ post }) => {
   });
 
   const ratePost = (value) => {
-    if (value === 1) {
+    if (value === "LIKED") {
       like.mutate();
     } else {
       dislike.mutate();
@@ -48,27 +48,25 @@ const ListItem = ({ post }) => {
   };
 
   return (
-    <div className="w-full flex group dark:bg-coolGray-800 dark:text-coolGray-100">
+    <div className="flex w-full group dark:bg-coolGray-800 dark:text-coolGray-100 last:border-b">
       <div className="container flex flex-row px-2 py-5 mx-auto dark:bg-coolGray-900">
-        <div className="w-6 pt shrink-0  flex flex-col items-center leading-none">
+        <div className="flex flex-col items-center w-6 leading-none pt shrink-0">
           <span
-            onClick={() => ratePost(1)}
+            onClick={() => ratePost("LIKED")}
             className={`w-full text-opacity-75 transition-all duration-300 hover:text-green-500 cursor-pointer mx-auto ${
-              post?.hasLiked === 1 ? "text-green-500" : "text-gray-400"
+              post?.status === "LIKED" ? "text-green-600" : "text-gray-400"
             }`}
           >
             <BsCaretUp size={25} className="mx-auto" />
           </span>
-          <p className="text-xs text-gray-500 font-semibold text-center">
+          <p className="text-xs font-semibold text-center text-gray-500">
             {post.likesCounter}
           </p>
           <span
-            onClick={() => ratePost(-1)}
-            className={`w-full text-opacity-75 transition-all duration-300 hover:text-red-500 cursor-pointer mx-auto 
+            onClick={() => ratePost("DISLIKED")}
+            className={`w-full text-opacity-75 transition-all duration-300 hover:text-red-400 cursor-pointer mx-auto 
                 ${
-                  (post?.hasLiked === 1) === -1
-                    ? "text-red-500"
-                    : "text-gray-400"
+                  post?.status === "DISLIKED" ? "text-red-500" : "text-gray-400"
                 }`}
           >
             <BsCaretDown className="mx-auto" size={25} />
@@ -104,22 +102,27 @@ const ListItem = ({ post }) => {
           </div>
           <div className="flex items-center justify-between mt-3">
             <Link to={`/post/${post._id}`}>
-              <p className="flex flex-nowrap gap-2 font-semibold items-center text-purple-700 cursor-pointer ">
+              <p className="flex items-center gap-2 font-semibold text-purple-700 cursor-pointer flex-nowrap ">
                 Read more
                 <FiArrowRight className="transition-transform transform group-hover:translate-x-2" />
               </p>
             </Link>
-            <div>
-              <p className="flex items-center hover:text-gray-900 cursor-pointer">
-                <img
-                  // src="https://source.unsplash.com/50x50/?portrait"
-                  src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?cs=srgb&dl=pexels-italo-melo-2379004.jpg&fm=jpg"
-                  alt="avatar"
-                  className="object-cover w-6 h-6 mx-4 rounded-full dark:bg-coolGray-500"
-                />
-                <span className=" dark:text-coolGray-400">{post?.author}</span>
-              </p>
-            </div>
+            {post?.name && (
+              <div>
+                <Link to={`/profile/${post?.postedBy}`}>
+                  <p className="flex items-end cursor-pointer hover:text-gray-900">
+                    <img
+                      src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?cs=srgb&dl=pexels-italo-melo-2379004.jpg&fm=jpg"
+                      alt="avatar"
+                      className="object-cover w-5 h-5 mx-2 rounded-full dark:bg-coolGray-500"
+                    />
+                    <span className="text-sm font-medium text-gray-500 hover:text-cyan-600 dark:text-coolGray-400">
+                      {post?.name}
+                    </span>
+                  </p>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
