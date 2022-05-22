@@ -16,6 +16,9 @@ const PostForm = lazy(() =>
 const Menu = lazy(() => import("../containers/sidebar/Menu/Menu"));
 const Article = lazy(() => import("../containers/content/Article/Article"));
 const Feed = lazy(() => import("../containers/content/Feed/FeedList"));
+const ExploreFeed = lazy(() =>
+  import("../containers/content/Feed/ExploreFeedList")
+);
 const Profile = lazy(() => import("../containers/content/Profile/Profile"));
 const NotificationBar = lazy(() =>
   import("../containers/rightbar/Notification/NotificationBar")
@@ -90,7 +93,7 @@ export const contentRoutes = [
   },
   {
     path: EXPLORE,
-    Content: () => null,
+    Content: ExploreFeed,
   },
   // {
   //   path: NOTIFICATION,
@@ -123,7 +126,7 @@ export const rightbarRoutes = [
   },
   {
     path: ARTICLE,
-    RightBar: () => null,
+    RightBar: ProfileCard,
   },
   {
     path: EXPLORE,

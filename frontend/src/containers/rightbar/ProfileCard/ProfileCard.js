@@ -1,26 +1,38 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation, matchPath } from "react-router-dom";
 import { useQuery } from "react-query";
 import { GetProfile, GetMyProfile } from "../../../queries/ProfileQuery";
 import { socialList } from "../../../Constants";
 import { Loading } from "../../../components";
-
-// const data = {
-//   name: "Subhajit Mandal",
-//   designation: "Tech Enthusiast",
-//   about:
-//     "Elit in irure anim ex. Officia deserunt quis do proident culpa. Veniam officia do nulla velit aliqu do fugiat elit pariatur mollit eiusmod eiusmod do ex.",
-//   likes: 36,
-//   post: 4,
-// };
+import { GETPOST, GetPost } from "./../../../queries/PostQuery";
 
 const ProfileCard = () => {
-  const { id } = useParams();
+  const location = useLocation();
+  let { id } = useParams();
+
+  const isPostRoute = matchPath(location.pathname, {
+    path: "/post/:id",
+    exact: true,
+  });
+
+  const { data: postData } = useQuery(
+    [GETPOST, isPostRoute?.params?.id],
+    () => GetPost(id),
+    {
+      enabled: Boolean(isPostRoute?.exact),
+    }
+  );
+
+  id = isPostRoute?.isExact ? postData?.postedBy : id;
 
   const queryFunc =
     id !== ":id" && id !== undefined ? () => GetProfile(id) : GetMyProfile;
 
-  const { data: profileData, isLoading } = useQuery("getProfile", queryFunc);
+  const { data: profileData, isLoading } = useQuery("getProfile", queryFunc, {
+    enabled: Boolean(
+      (isPostRoute?.isExact && postData?.postedBy) || !isPostRoute
+    ),
+  });
 
   if (isLoading) {
     return <Loading />;
@@ -28,7 +40,7 @@ const ProfileCard = () => {
 
   return (
     <>
-      <div className="m-2 border border-gray-300  rounded-xl scrollbar-hide">
+      <div className="m-2 border border-gray-300 rounded-xl scrollbar-hide">
         <div className="relative flex items-center h-32 py-4">
           <div className="rounded-xl ml-3 z-10 h-[5.5rem] w-28  overflow-hidden">
             <img
@@ -41,7 +53,7 @@ const ProfileCard = () => {
             <div className="flex items-end px-3 text-xl font-medium h-1/2">
               {profileData?.name}
             </div>
-            <div className="px-3 font-medium text-purple-600 break-words  h-1/2">
+            <div className="px-3 font-medium text-purple-600 break-words h-1/2">
               {profileData?.designation || profileData?.email}
             </div>
           </div>

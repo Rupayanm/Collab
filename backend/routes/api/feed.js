@@ -61,6 +61,7 @@ router.get("/privatefeed", auth, async (req, res) => {
     console.error(err.message);
   }
 });
+
 router.get("/publicfeed", async (req, res) => {
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
@@ -87,7 +88,7 @@ router.get("/publicfeed", async (req, res) => {
       const author = await User.findById(feedData[post].postedBy)
         .select("name email avatar")
         .lean();
-      feed.push({ ...post, ...author });
+      feed.push({ ...author, ...feedData[post] });
     }
     results.feed = feed;
     res.status(200).json(results);

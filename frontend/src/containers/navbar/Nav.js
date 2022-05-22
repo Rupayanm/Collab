@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-// import useLocalStorage from "../../hooks/useLocalStorage";
-// import useDropdown from "../../hooks/useDropdown";\
 import { LOGIN } from "../../routes/routes.contants";
 
 const Nav = () => {
