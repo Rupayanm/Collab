@@ -39,7 +39,7 @@ export const getPublicFeed = async (page = 1, limit = 50) => {
   const data = await (
     await fetch(
       `http://localhost:5000/api/feed/publicfeed?page=${page}&limit=${limit}`,
-      createGet()
+      createGetAuth()
     )
   ).json();
   return data;

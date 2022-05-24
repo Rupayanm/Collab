@@ -66,6 +66,8 @@ router.get("/publicfeed", authOpt, async (req, res) => {
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
 
+  let user = req.user ? await User.findById(req.user.id) : null;
+
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const feed = [];
@@ -88,7 +90,24 @@ router.get("/publicfeed", authOpt, async (req, res) => {
       const author = await User.findById(feedData[post].postedBy)
         .select("name email avatar")
         .lean();
-      feed.push({ ...author, ...feedData[post] });
+      if (user) {
+        if (feedData[post].likes && req.user.id in feedData[post].likes) {
+          feed.push({ ...author, ...feedData[post], status: "LIKED" });
+        } else if (
+          feedData[post].dislikes &&
+          req.user.id in feedData[post].dislikes
+        ) {
+          feed.push({
+            ...author,
+            ...feedData[post],
+            status: "DISLIKED",
+          });
+        } else {
+          feed.push({ ...author, ...feedData[post], status: "NULL" });
+        }
+      } else {
+        feed.push({ ...author, ...feedData[post] });
+      }
     }
     results.feed = feed;
     res.status(200).json(results);

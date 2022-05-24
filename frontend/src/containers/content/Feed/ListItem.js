@@ -13,8 +13,8 @@ import { useMutation } from "react-query";
 import { LikePost, DislikePost } from "../../../queries/PostQuery";
 import dayjs from "dayjs";
 import RelativeTime from "dayjs/plugin/relativeTime";
-import { GETFEED } from "../../../queries/FeedQuery";
-import { TOKEN } from "../../../Constants";
+import { GETFEED, GETPUBLICFEED } from "../../../queries/FeedQuery";
+import { GETPROFILEFEED } from "../../../queries/ProfileQuery";
 
 dayjs.extend(RelativeTime);
 
@@ -29,14 +29,21 @@ const getTime = (time) => {
 
 const ListItem = ({ post }) => {
   const queryClient = useQueryClient();
-  const token = localStorage.getItem(TOKEN);
 
   const like = useMutation(() => LikePost(post._id), {
-    onSuccess: () => queryClient.invalidateQueries([GETFEED, token]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(GETFEED);
+      queryClient.invalidateQueries(GETPUBLICFEED);
+      queryClient.invalidateQueries(GETPROFILEFEED);
+    },
   });
 
   const dislike = useMutation(() => DislikePost(post._id), {
-    onSuccess: () => queryClient.invalidateQueries([GETFEED, token]),
+    onSuccess: () => {
+      queryClient.invalidateQueries(GETFEED);
+      queryClient.invalidateQueries(GETPUBLICFEED);
+      queryClient.invalidateQueries(GETPROFILEFEED);
+    },
   });
 
   const ratePost = (value) => {
