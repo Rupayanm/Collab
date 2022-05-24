@@ -11,15 +11,39 @@ const auth = require("../../middleware/auth");
 // @route    GET api/search/:id
 // @desc     Get profiles from query
 // @access   Private
-router.get("/:id", auth, async (req, res) => {
+// router.get("/:id", auth, async (req, res) => {
+//   try {
+//     const result = await User.aggregate([
+//       {
+//         $search: {
+//           autocomplete: {
+//             query: req.params.id,
+//             path: "email",
+//             fuzzy: {
+//               maxEdits: 2,
+//             },
+//           },
+//         },
+//       },
+//       {
+//         $limit: 10,
+//       },
+//     ]);
+//     res.status(200).json(result);
+//   } catch (err) {
+//     res.status(500).send("server error");
+//   }
+// });
+
+router.get("/posts", async (req, res) => {
   try {
-    console.log(req.params.id);
-    const result = await User.aggregate([
+    console.log(req.body);
+    const result = await Post.aggregate([
       {
         $search: {
           autocomplete: {
-            query: req.params.id,
-            path: "email",
+            query: req.body.query,
+            path: "title",
             fuzzy: {
               maxEdits: 2,
             },
@@ -30,13 +54,13 @@ router.get("/:id", auth, async (req, res) => {
         $limit: 10,
       },
     ]);
-    console.log(result);
     res.status(200).json(result);
   } catch (err) {
-    console.error(err.message);
+    console.log(err);
     res.status(500).send("server error");
   }
 });
+
 module.exports = router;
 
 // {

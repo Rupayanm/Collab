@@ -34,6 +34,7 @@ function Comment({ comments }) {
   const postComment = () => {
     if (text) {
       addComment.mutate({ text });
+      setText("");
     }
   };
 

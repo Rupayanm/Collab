@@ -1,5 +1,7 @@
 import React, { createContext, useReducer, useContext } from "react";
 import { TOKEN, PROFILEKEY } from "../Constants";
+import { useQuery } from "react-query";
+import { GETMYPROFILE, GetMyProfile } from "./../queries/ProfileQuery";
 
 export const AuthContext = createContext();
 
@@ -52,6 +54,17 @@ export const AuthProvider = (props) => {
 
 export const useAuth = () => {
   const [value, dispatch] = useContext(AuthContext);
+
+  //eslint-disable-next-line
+  const getProfileData = useQuery([GETMYPROFILE, value.token], GetMyProfile, {
+    enabled: Boolean(value?.token),
+    onSuccess: (data) => setUser(data),
+    onError: (error) => {
+      if (error.response?.status >= 400) {
+        logout();
+      }
+    },
+  });
 
   const logout = () => {
     dispatch({ type: actionTypes.logout });
