@@ -8,6 +8,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const auth = require("../../middleware/auth");
+const authOpt = require("../../middleware/authOpt");
 const util = require("util");
 
 router.get("/privatefeed", auth, async (req, res) => {
@@ -28,7 +29,6 @@ router.get("/privatefeed", auth, async (req, res) => {
   };
   try {
     let user = await User.findById(req.user.id);
-    user.skills = user.skills.map((v) => v.toLowerCase());
     let feedData = await Post.find({ tags: { $in: user.skills } })
       .limit(limit)
       .skip(startIndex)
@@ -62,7 +62,7 @@ router.get("/privatefeed", auth, async (req, res) => {
   }
 });
 
-router.get("/publicfeed", async (req, res) => {
+router.get("/publicfeed", authOpt, async (req, res) => {
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
 

@@ -29,13 +29,52 @@ router.post(
       members: req.body.members,
       tags: req.body.tags,
     };
-    postFields.tags = postFields.tags.map((v) => v.toLowerCase());
+
     try {
       let post = new Post({
         ...postFields,
       });
       await post.save();
       return res.status(200).json(post);
+    } catch (err) {
+      console.error(err.message);
+      return res.status(500).send("Server-Error");
+    }
+  }
+);
+
+router.post(
+  "/editPost/:id",
+  auth,
+  checkObjectId("id"),
+  check("title", "title is required").notEmpty(),
+  check("description", " description is required").notEmpty(),
+  check("tags", "no tags provided").isArray(),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const post = await Post.findById(req.params.id).lean();
+    if (post?.postedBy.toString() !== req.user.id) {
+      return res.status(403).send("User is not author of Post");
+    }
+    let postFields = {
+      name: req.user.name,
+      postedBy: req.user.id,
+      title: req.body.title,
+      description: req.body.description,
+      members: req.body.members,
+      tags: req.body.tags,
+    };
+
+    try {
+      const postResponse = await Post.findByIdAndUpdate(
+        req.params.id,
+        { $set: postFields },
+        { new: true, setDefaultsOnInsert: true }
+      );
+      return res.status(200).json(postResponse);
     } catch (err) {
       console.error(err.message);
       return res.status(500).send("Server-Error");
@@ -288,6 +327,7 @@ router.delete("/comment/:id/:comment_id", auth, async (req, res) => {
     return res.status(500).send("Server Error");
   }
 });
+
 router.delete("/deleteNotification/:id", auth, async (req, res) => {
   try {
     const notification = await User.findOneAndUpdate(

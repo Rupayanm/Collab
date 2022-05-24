@@ -1,11 +1,10 @@
 import React, { useEffect } from "react";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useParams, matchPath, useLocation } from "react-router";
 import { useQuery, useMutation } from "react-query";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { skillList } from "../../../Constants";
 import { useFormContext } from "../../../context/FormContext";
 import { NewPost, GetPost, UpdatePost } from "../../../queries/PostQuery";
-import { HOME } from "../../../routes/routes.contants";
 import {
   MultiInput,
   MultiSelectTabs,
@@ -15,6 +14,7 @@ import {
 import ArticleEditor from "./ArticleEditor";
 
 const PostForm = () => {
+  const location = useLocation();
   const { id } = useParams();
   const history = useHistory();
   const {
@@ -28,6 +28,10 @@ const PostForm = () => {
     addLink,
     removeLink,
   } = useFormContext();
+
+  const match = matchPath(location.pathname, {
+    path: "/edit/:id",
+  });
 
   const { data: postData } = useQuery(["get-post", id], () => GetPost(id), {
     enabled: Boolean(id),
@@ -47,8 +51,8 @@ const PostForm = () => {
     if (data.error) {
       console.log(data.error);
     } else {
-      ToastSuccess({ message: "Post Created" });
-      history.push(HOME);
+      ToastSuccess({ message: `Post ${match ? "Updated" : "Created"}` });
+      history.push("/post/" + data?._id);
     }
   };
 
@@ -134,7 +138,7 @@ const PostForm = () => {
             />
           </div>
           <button className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 cursor-pointer ">
-            Create Post
+            {match ? "Update" : "Create"} Post
           </button>
         </form>
       </div>

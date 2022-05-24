@@ -28,7 +28,10 @@ export const GetPost = async (id) => {
 export const UPDATEPOST = "UPDATE_POST";
 export const UpdatePost = async (id, value) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/update/" + id, createPutAuth())
+    await fetch(
+      "http://localhost:5000/api/posts/editPost/" + id,
+      createPostAuth(value)
+    )
   ).json();
   return data;
 };
