@@ -53,3 +53,15 @@ export const createPutAuth = (value) => {
     body: JSON.stringify(value),
   };
 };
+
+export const createDeleteAuth = (value) => {
+  const token = localStorage.getItem(TOKEN);
+  return {
+    method: "DELETE",
+    headers: {
+      "x-auth-token": token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(value),
+  };
+};

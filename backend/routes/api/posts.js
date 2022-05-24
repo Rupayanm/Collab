@@ -252,6 +252,7 @@ router.put("/unlike/:id", auth, checkObjectId("id"), async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
 // @route    POST api/posts/comment/:id
 // @desc     Comment on a post
 // @access   Private

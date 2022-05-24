@@ -1,7 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { FiEdit } from "react-icons/fi";
+import { FiEdit, FiTrash } from "react-icons/fi";
 import { GetPost } from "../../../queries/PostQuery";
 import { ToastError } from "../../../components/Toasts";
 import { useHistory, useParams, Link } from "react-router-dom";
@@ -10,6 +10,7 @@ import Loading from "../../../components/Loading/index";
 import { GETPOST } from "../../../queries/PostQuery";
 import dayjs from "dayjs";
 import { useAuth } from "../../../context/AuthContext";
+import Comment from "./Comment";
 
 const colors = [
   "bg-red-500",
@@ -42,22 +43,32 @@ const Article = () => {
   }
 
   return (
-    <div className="relative w-full px-10 pb-10">
-      <div className="sticky flex flex-row justify-between top-6">
+    <div className="relative w-full px-10 pb-4">
+      <div className="sticky flex flex-row justify-between top-6  z-10 ">
         <div
           onClick={() => history.goBack()}
-          className="w-min text-gray-800 z-10 flex flex-nowrap items-center backdrop-filter backdrop-blur-sm py-1.5 px-3 border border-gray-300 rounded-full cursor-pointer hover:border-gray-500 focus:bg-gray-500"
+          className="w-min text-gray-800 flex flex-nowrap items-center backdrop-filter backdrop-blur-sm py-1.5 px-3 border border-gray-300 rounded-full cursor-pointer hover:border-gray-500 focus:bg-gray-500"
         >
           <MdOutlineArrowBack size={25} className="pointer-events-none" />
           <div className="px-2 font-medium text-md">Back</div>
         </div>
         {user?._id === data?.postedBy && (
-          <Link to={`/edit/${id}`}>
-            <div className="w-min text-gray-800 z-10 flex flex-nowrap items-center backdrop-filter backdrop-blur-sm py-1.5 px-4 border border-gray-300 rounded-full sticky top-6 cursor-pointer hover:border-gray-500 focus:bg-gray-500 ">
-              <FiEdit size={20} className="pointer-events-none" />
-              <div className="pl-2 pr-1 font-medium text-md">Edit</div>
+          <div className="flex space-x-5">
+            <Link to={`/edit/${id}`}>
+              <div className="text-gray-800 flex flex-nowrap items-center backdrop-filter backdrop-blur-sm py-1.5 px-4 border border-gray-300 rounded-full sticky top-6 cursor-pointer hover:border-gray-500 focus:bg-gray-500 group">
+                <FiEdit size={20} className="pointer-events-none" />
+                <div className="font-medium text-md duration-300 transition-all w-0 overflow-hidden group-hover:w-auto group-hover:ml-2">
+                  Edit
+                </div>
+              </div>
+            </Link>
+            <div className="text-red-500 flex flex-nowrap items-center backdrop-filter backdrop-blur-sm py-1.5 px-4 border border-red-300 rounded-full sticky top-6 cursor-pointer hover:border-red-400 focus:bg-red-400 group">
+              <FiTrash size={20} className="pointer-events-none" />
+              <div className="font-medium text-md duration-300 transition-all w-0 overflow-hidden group-hover:w-auto group-hover:ml-2 group-hover:mr-1">
+                Delete
+              </div>
             </div>
-          </Link>
+          </div>
         )}
       </div>
       <article className="mt-10 space-y-6 dark:bg-coolGray-800 dark:text-coolGray-50">
@@ -97,7 +108,7 @@ const Article = () => {
           }}
         ></div>
       </article>
-      <div>
+      <div className="border-b">
         <div className="flex flex-wrap py-6 space-x-2 border-t border-dashed dark:border-coolGray-400">
           {data?.tags &&
             data.tags.map((item, index) => (
@@ -131,6 +142,7 @@ const Article = () => {
           </div>
         )}
       </div>
+      <Comment comments={data?.comments} />
     </div>
   );
 };

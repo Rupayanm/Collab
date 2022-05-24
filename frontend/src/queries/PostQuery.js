@@ -3,6 +3,7 @@ import {
   createGetAuth,
   createPostAuth,
   createPutAuth,
+  createDeleteAuth,
   //   createPost,
 } from "./requests.config";
 
@@ -52,18 +53,24 @@ export const DislikePost = async (id) => {
   return data;
 };
 
-export const ADDPOST = "ADD_COMMENT";
-export const AddComment = async (id) => {
+export const ADDCOMMENT = "ADD_COMMENT";
+export const AddComment = async (id, values) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/" + id, createGetAuth())
+    await fetch(
+      "http://localhost:5000/api/posts/comment/" + id,
+      createPostAuth(values)
+    )
   ).json();
   return data;
 };
 
-export const DELETEPOST = "DELETE_POST";
-export const DeleteComment = async (id) => {
+export const DELETECOMMENT = "DELETE_POST";
+export const DeleteComment = async (id, commentId) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/" + id, createGetAuth())
+    await fetch(
+      "http://localhost:5000/api/posts/comment/" + id + "/" + commentId,
+      createDeleteAuth()
+    )
   ).json();
   return data;
 };
