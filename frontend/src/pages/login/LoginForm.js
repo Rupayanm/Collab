@@ -31,8 +31,7 @@ const LoginForm = ({ setSignup }) => {
     if (data.error) {
       ToastError({ message: data.error.msg });
     } else {
-      console.log(data);
-      setUser(JSON.stringify(data));
+      setUser(data);
       history.push(HOME);
     }
   };

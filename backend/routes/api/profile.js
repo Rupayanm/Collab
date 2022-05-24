@@ -61,7 +61,6 @@ router.post(
         : skills.split(",").map((skill) => " " + skill.trim()),
       ...rest,
     };
-    profileFields.skills = profileFields.skills.map((v) => v.toLowerCase());
 
     // Build socialFields object
     const socialFields = { youtube, twitter, instagram, linkedin, facebook };
@@ -76,7 +75,7 @@ router.post(
 
     try {
       // Using upsert option (creates new doc if no match is found):
-      let profile = await User.findOneAndUpdate(
+      let profile = await User.findByIdAndUpdate(
         req.user.id,
         { $set: profileFields },
         { new: true, setDefaultsOnInsert: true }

@@ -68,6 +68,11 @@ export const sidebarRoutes = [
     restricted: true,
     Sidebar: Menu,
   },
+  {
+    path: PROFILEEDIT,
+    restricted: true,
+    Sidebar: Menu,
+  },
 ];
 
 export const contentRoutes = [
@@ -102,6 +107,11 @@ export const contentRoutes = [
   // },
   {
     path: PROFILE,
+    restricted: true,
+    Content: Profile,
+  },
+  {
+    path: PROFILEEDIT,
     restricted: true,
     Content: Profile,
   },

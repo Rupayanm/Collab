@@ -59,11 +59,11 @@ const ProfileCard = () => {
           </div>
           <div className="absolute bottom-0 z-0 w-full bg-gray-200 h-1/2"></div>
         </div>
-        <div className="p-5 text-sm">{profileData?.about}</div>
+        <div className="p-5 text-sm">{profileData?.bio}</div>
         <div className="flex flex-row justify-center mx-4 mb-6 divide-x-2 divide-gray-400 flex-nowrap">
           <div className="px-10 text-center">
             <h6 className="text-lg font-bold text-deep-purple-accent-400">
-              {profileData?.post || 0}
+              {profileData?.posts?.length || 0}
             </h6>
             <p className="font-bold">Posts</p>
           </div>

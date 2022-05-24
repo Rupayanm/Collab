@@ -14,10 +14,12 @@ import {
 import { useAuth } from "../../../context/AuthContext";
 
 const Profile = () => {
-  const { id } = useParams();
+  let { id } = useParams();
   const { user } = useAuth();
   const history = useHistory();
   const location = useLocation();
+  id = id !== ":id" && id !== "me" ? id : null;
+
   const { data, refetch } = useQuery([GETPROFILEFEED], () =>
     GetProfileFeed(id ?? user?._id)
   );
