@@ -37,6 +37,14 @@ export const UpdatePost = async (id, value) => {
   return data;
 };
 
+export const DELETEPOST = "DELETE_POST";
+export const DeletePost = async (id) => {
+  const data = await (
+    await fetch("http://localhost:5000/api/posts/" + id, createDeleteAuth())
+  ).json();
+  return data;
+};
+
 export const LIKEPOST = "LIKE_POST";
 export const LikePost = async (id) => {
   const data = await (
@@ -64,7 +72,7 @@ export const AddComment = async (id, values) => {
   return data;
 };
 
-export const DELETECOMMENT = "DELETE_POST";
+export const DELETECOMMENT = "DELETE_COMMENT";
 export const DeleteComment = async (id, commentId) => {
   const data = await (
     await fetch(
