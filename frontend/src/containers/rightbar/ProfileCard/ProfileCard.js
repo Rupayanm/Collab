@@ -69,9 +69,9 @@ const ProfileCard = () => {
           </div>
           <div className="px-10 text-center ">
             <h6 className="text-lg font-bold text-deep-purple-accent-400">
-              {profileData?.likes || 0}
+              {profileData?.views || 0}
             </h6>
-            <p className="font-bold">Likes</p>
+            <p className="font-bold">Views</p>
           </div>
         </div>
         {profileData?.socials && (

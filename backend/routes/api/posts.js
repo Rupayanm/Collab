@@ -28,6 +28,7 @@ router.post(
       description: req.body.description,
       members: req.body.members,
       tags: req.body.tags,
+      readTime: req.body.readTime,
     };
 
     try {
@@ -35,6 +36,15 @@ router.post(
         ...postFields,
       });
       await post.save();
+      const user = await User.findByIdAndUpdate(
+        req.user.id,
+        {
+          $push: {
+            posts: post.id,
+          },
+        },
+        { new: true, setDefaultsOnInsert: true }
+      );
       return res.status(200).json(post);
     } catch (err) {
       console.error(err.message);
@@ -66,6 +76,7 @@ router.post(
       description: req.body.description,
       members: req.body.members,
       tags: req.body.tags,
+      readTime: req.body.readTime,
     };
 
     try {
@@ -119,12 +130,58 @@ router.delete("/:id", [auth, checkObjectId("id")], async (req, res) => {
       return res.status(401).json({ msg: "User not authorized" });
     }
 
+    const authorviews = await User.findByIdAndUpdate(
+      post.postedBy,
+      {
+        $inc: { views: -post.views },
+        $pull: {
+          posts: post.id,
+        },
+      },
+      { new: true }
+    ).select("views");
+
     await post.remove();
 
     res.json({ msg: "Post removed" });
   } catch (err) {
     console.error(err.message);
 
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route    PUT api/posts/view/:id
+// @desc     Like a post
+// @access   Public
+router.put("/view/:id", checkObjectId("id"), async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+
+    const user = await User.findById(post.postedBy);
+
+    const views = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        $inc: { views: 1 },
+      },
+      { new: true }
+    ).select("views");
+
+    const authorviews = await User.findByIdAndUpdate(
+      post.postedBy,
+      {
+        $inc: { views: 1 },
+      },
+      { new: true }
+    ).select("views");
+
+    return res.status(200).json(views);
+  } catch (err) {
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 });

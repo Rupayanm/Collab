@@ -26,6 +26,10 @@ const UserSchema = new mongoose.Schema({
   posts: {
     type: [mongoose.Schema.Types.ObjectId],
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
   company: {
     type: String,
   },

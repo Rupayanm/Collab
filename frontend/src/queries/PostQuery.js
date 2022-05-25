@@ -2,6 +2,7 @@ import {
   //   createGet,
   createGetAuth,
   createPostAuth,
+  createPut,
   createPutAuth,
   createDeleteAuth,
   //   createPost,
@@ -41,6 +42,14 @@ export const DELETEPOST = "DELETE_POST";
 export const DeletePost = async (id) => {
   const data = await (
     await fetch("http://localhost:5000/api/posts/" + id, createDeleteAuth())
+  ).json();
+  return data;
+};
+
+export const VIEWPOST = "VIEW_POST";
+export const ViewPost = async (id) => {
+  const data = await (
+    await fetch("http://localhost:5000/api/posts/view/" + id, createPut())
   ).json();
   return data;
 };

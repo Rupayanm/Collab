@@ -1,8 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useQuery, useMutation } from "react-query";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { FiEdit, FiTrash } from "react-icons/fi";
-import { GetPost } from "../../../queries/PostQuery";
+import { GetPost, ViewPost } from "../../../queries/PostQuery";
 import { ToastError } from "../../../components/Toasts";
 import { useHistory, useParams, Link } from "react-router-dom";
 import DOMPurify from "dompurify";
@@ -39,17 +39,21 @@ const Article = () => {
     onSuccess: () => history.push("/home"),
   });
 
-  if (isLoading) {
-    return (
-      <>
-        <Loading />
-      </>
-    );
-  }
-
   const deletePost = () => {
     deleteMutation.mutate();
   };
+
+  const viewPost = useMutation(() => ViewPost(id));
+
+  useEffect(() => {
+    if (data?.readTime) {
+      let time = Math.max(30, data?.readTime);
+      const timer = setTimeout(viewPost.mutate, time * 1000);
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+  }, [data?.readTime, viewPost]);
 
   const showToast = () => {
     toast.custom((t) => (
@@ -60,6 +64,14 @@ const Article = () => {
       />
     ));
   };
+
+  if (isLoading) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
 
   return (
     <>
