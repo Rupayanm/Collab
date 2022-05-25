@@ -58,11 +58,15 @@ export const useAuth = () => {
   //eslint-disable-next-line
   const getProfileData = useQuery([GETMYPROFILE, value.token], GetMyProfile, {
     enabled: Boolean(value?.token),
-    onSuccess: (data) => setUser(data),
-    onError: (error) => {
-      if (error.response?.status >= 400) {
+    onSuccess: (data) => {
+      if (data?._id) {
+        setUser(data);
+      } else {
         logout();
       }
+    },
+    onError: (error) => {
+      logout();
     },
   });
 

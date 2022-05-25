@@ -1,15 +1,15 @@
-import { createPost } from "./requests.config";
+import { createPost , apiURL } from "./requests.config";
 
 export const login = async (formDetails) => {
   const data = await (
-    await fetch("http://localhost:5000/api/auth/", createPost(formDetails))
+    await fetch(`${apiURL}auth/`, createPost(formDetails))
   ).json();
   return data;
 };
 
 export const signup = async (formDetails) => {
   const data = await (
-    await fetch("http://localhost:5000/api/users/", createPost(formDetails))
+    await fetch(`${apiURL}users/`, createPost(formDetails))
   ).json();
   return data;
 };

@@ -5,6 +5,7 @@ import {
   createPut,
   createPutAuth,
   createDeleteAuth,
+  apiURL
   //   createPost,
 } from "./requests.config";
 
@@ -12,7 +13,7 @@ export const NEWPOST = "NEW_POST";
 export const NewPost = async (values) => {
   const data = await (
     await fetch(
-      "http://localhost:5000/api/posts/createPost",
+      `${apiURL}posts/createPost`,
       createPostAuth(values)
     )
   ).json();
@@ -22,7 +23,7 @@ export const NewPost = async (values) => {
 export const GETPOST = "GET_POST";
 export const GetPost = async (id) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/" + id, createGetAuth())
+    await fetch(`${apiURL}posts/` + id, createGetAuth())
   ).json();
   return data;
 };
@@ -31,7 +32,7 @@ export const UPDATEPOST = "UPDATE_POST";
 export const UpdatePost = async (id, value) => {
   const data = await (
     await fetch(
-      "http://localhost:5000/api/posts/editPost/" + id,
+      `${apiURL}posts/editPost/` + id,
       createPostAuth(value)
     )
   ).json();
@@ -41,7 +42,7 @@ export const UpdatePost = async (id, value) => {
 export const DELETEPOST = "DELETE_POST";
 export const DeletePost = async (id) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/" + id, createDeleteAuth())
+    await fetch(`${apiURL}posts/` + id, createDeleteAuth())
   ).json();
   return data;
 };
@@ -49,7 +50,7 @@ export const DeletePost = async (id) => {
 export const VIEWPOST = "VIEW_POST";
 export const ViewPost = async (id) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/view/" + id, createPut())
+    await fetch(`${apiURL}posts/view/` + id, createPut())
   ).json();
   return data;
 };
@@ -57,7 +58,7 @@ export const ViewPost = async (id) => {
 export const LIKEPOST = "LIKE_POST";
 export const LikePost = async (id) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/like/" + id, createPutAuth())
+    await fetch(`${apiURL}posts/like/` + id, createPutAuth())
   ).json();
   return data;
 };
@@ -65,7 +66,7 @@ export const LikePost = async (id) => {
 export const DISLIKEPOST = "DISLIKE_POST";
 export const DislikePost = async (id) => {
   const data = await (
-    await fetch("http://localhost:5000/api/posts/unlike/" + id, createPutAuth())
+    await fetch(`${apiURL}posts/unlike/` + id, createPutAuth())
   ).json();
   return data;
 };
@@ -74,7 +75,7 @@ export const ADDCOMMENT = "ADD_COMMENT";
 export const AddComment = async (id, values) => {
   const data = await (
     await fetch(
-      "http://localhost:5000/api/posts/comment/" + id,
+      `${apiURL}posts/comment/` + id,
       createPostAuth(values)
     )
   ).json();
@@ -85,7 +86,7 @@ export const DELETECOMMENT = "DELETE_COMMENT";
 export const DeleteComment = async (id, commentId) => {
   const data = await (
     await fetch(
-      "http://localhost:5000/api/posts/comment/" + id + "/" + commentId,
+      `${apiURL}posts/comment/` + id + "/" + commentId,
       createDeleteAuth()
     )
   ).json();
