@@ -2,12 +2,19 @@ import React from "react";
 import ListItem from "./ListItem";
 import { useQuery } from "react-query";
 import { getPublicFeed, GETPUBLICFEED } from "../../../queries/FeedQuery";
+import { useAuth } from "../../../context/AuthContext";
 // import Pagination from "../../../components/Pagination";
 
 const ExploreFeed = () => {
-  const { data } = useQuery([GETPUBLICFEED], () => getPublicFeed(1, 50), {
-    onError: (error) => console.log(error),
-  });
+  const { token } = useAuth();
+
+  const { data } = useQuery(
+    [GETPUBLICFEED, token],
+    () => getPublicFeed(1, 50),
+    {
+      onError: (error) => console.log(error),
+    }
+  );
 
   return (
     <>

@@ -10,7 +10,9 @@ const Feed = () => {
   const { token } = useAuth();
 
   const { data, refetch } = useQuery([GETFEED, token], () => getFeed(1, 50), {
-    onError: (error) => console.log(error),
+    onError: (error) => {
+      console.log(error);
+    },
   });
 
   useEffect(() => {
