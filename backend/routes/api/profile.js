@@ -61,7 +61,6 @@ router.post(
         : skills.split(",").map((skill) => " " + skill.trim()),
       ...rest,
     };
-    profileFields.skills = profileFields.skills.map((v) => v.toLowerCase());
 
     // Build socialFields object
     const socialFields = { youtube, twitter, instagram, linkedin, facebook };
@@ -76,7 +75,7 @@ router.post(
 
     try {
       // Using upsert option (creates new doc if no match is found):
-      let profile = await User.findOneAndUpdate(
+      let profile = await User.findByIdAndUpdate(
         req.user.id,
         { $set: profileFields },
         { new: true, setDefaultsOnInsert: true }
@@ -112,12 +111,43 @@ router.get("/profilePosts/:id", auth, async (req, res) => {
 
   const id = req.params.id;
   try {
-    const posts = await Post.find({ postedBy: id })
+    const postData = await Post.find({ postedBy: id })
       .skip(startIndex)
       .limit(limit)
+      .lean()
       .exec();
+
+    const posts = [];
+    for (let post in postData) {
+      if (postData[post].likes && req.user.id in postData[post].likes) {
+        posts.push({ ...postData[post], status: "LIKED" });
+      } else if (
+        postData[post].dislikes &&
+        req.user.id in postData[post].dislikes
+      ) {
+        posts.push({
+          ...postData[post],
+          status: "DISLIKED",
+        });
+      } else {
+        posts.push({ ...postData[post], status: "NULL" });
+      }
+    }
     results.posts = posts;
     return res.status(200).json(results);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+// @route    GET api/profile/id
+// @desc     Get current users profile
+// @access   Private
+router.get("/:id", async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    res.json(user);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

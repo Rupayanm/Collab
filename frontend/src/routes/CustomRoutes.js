@@ -1,6 +1,7 @@
 import { Route, Redirect } from "react-router-dom";
 import { TOKEN } from "../Constants";
 import { HOME } from "./routes.contants";
+import { useAuth } from "../context/AuthContext";
 
 export const PublicRoute = ({ component: Component, restricted, ...rest }) => {
   const token = localStorage.getItem(TOKEN);
@@ -17,7 +18,7 @@ export const PublicRoute = ({ component: Component, restricted, ...rest }) => {
 };
 
 export const CustomRoute = ({ component: Component, restricted, ...rest }) => {
-  const token = localStorage.getItem(TOKEN);
+  const { token } = useAuth();
   return (
     // Show the component only when the user is logged in
     // Otherwise, redirect the user to /login page

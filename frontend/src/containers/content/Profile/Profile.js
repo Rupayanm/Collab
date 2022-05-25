@@ -1,20 +1,36 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams, useHistory } from "react-router-dom";
 import { useQuery } from "react-query";
 import ListItem from "../Feed/ListItem";
-import { getFeed } from "../../../queries/FeedQuery";
+// import { getFeed } from "../../../queries/FeedQuery";
 import { FiSettings } from "react-icons/fi";
 import ProfileCard from "../../rightbar/ProfileCard/ProfileCard";
 import ProfileEditCard from "../../rightbar/ProfileCard/ProfileEditCard";
 import { PROFILEEDIT, PROFILE } from "../../../routes/routes.contants";
+import {
+  GETPROFILEFEED,
+  GetProfileFeed,
+} from "./../../../queries/ProfileQuery";
+import { useAuth } from "../../../context/AuthContext";
 
 const Profile = () => {
+  let { id } = useParams();
+  const { user } = useAuth();
+  const history = useHistory();
   const location = useLocation();
-  const { data: posts, refetch } = useQuery("feed", () => getFeed(1, 50));
+  id = id !== ":id" && id !== "me" ? id : null;
+
+  const { data, refetch } = useQuery([GETPROFILEFEED], () =>
+    GetProfileFeed(id ?? user?._id)
+  );
+
+  if (!(id || user?._id)) {
+    history.goBack();
+  }
 
   return (
     <>
-      <div className="mx-2 relative">
+      <div className="relative mx-2">
         <div className="pt-4 lg:hidden">
           {location.pathname === PROFILEEDIT ? (
             <ProfileEditCard />
@@ -22,7 +38,7 @@ const Profile = () => {
             <ProfileCard />
           )}
         </div>
-        <div className="h-auto w-full text-2xl flex flex-row justify-between items-center font-medium p-2 border-b border-gray-300 bg-white z-10 sticky top-0">
+        <div className="sticky top-0 z-10 flex flex-row items-center justify-between w-full h-auto p-2 text-2xl font-medium bg-white border-b border-gray-300">
           <div className="pl-1.5">Posts</div>
           {location.pathname === PROFILEEDIT ? (
             <Link to={PROFILE}>
@@ -38,11 +54,10 @@ const Profile = () => {
             </Link>
           )}
         </div>
-        <div className="w-full px-1 grid grid-cols-1 divide-y divide-gray-200 ">
-          {Array.isArray(posts) &&
-            posts.map((post, index) => (
-              <ListItem post={post} key={index} refetch={refetch} />
-            ))}
+        <div className="grid w-full grid-cols-1 px-1 divide-y divide-gray-200 ">
+          {data?.posts?.map((post, index) => (
+            <ListItem post={post} key={index} refetch={refetch} />
+          ))}
         </div>
       </div>
     </>

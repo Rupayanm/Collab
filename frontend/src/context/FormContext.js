@@ -88,11 +88,11 @@ export const useFormContext = () => {
   };
 
   const addTag = (value) => {
-    dispatch({ type: actionTypes.add_tag, payload: value.toLowerCase() });
+    dispatch({ type: actionTypes.add_tag, payload: value });
   };
 
   const removeTag = (value) => {
-    dispatch({ type: actionTypes.remove_tag, payload: value.toLowerCase() });
+    dispatch({ type: actionTypes.remove_tag, payload: value });
   };
 
   const addLink = (value) => {

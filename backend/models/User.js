@@ -44,6 +44,9 @@ const UserSchema = new mongoose.Schema({
   bio: {
     type: String,
   },
+  designation: {
+    type: String,
+  },
   githubusername: {
     type: String,
   },
@@ -120,6 +123,9 @@ const UserSchema = new mongoose.Schema({
       type: String,
     },
     instagram: {
+      type: String,
+    },
+    github: {
       type: String,
     },
   },
