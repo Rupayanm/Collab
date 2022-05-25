@@ -13,6 +13,10 @@ import {
 } from "../../../components";
 import ArticleEditor from "./ArticleEditor";
 
+const getReadTime = (paragraph) => {
+  return Math.ceil(((paragraph?.split(" ")?.length || 0) * 60) / 200);
+};
+
 const PostForm = () => {
   const location = useLocation();
   const { id } = useParams();
@@ -56,13 +60,27 @@ const PostForm = () => {
     }
   };
 
-  const updatePostQuery = useMutation(() => UpdatePost(id, formDetails), {
-    onSuccess,
-  });
+  const updatePostQuery = useMutation(
+    () =>
+      UpdatePost(id, {
+        ...formDetails,
+        readTime: getReadTime(formDetails.description),
+      }),
+    {
+      onSuccess,
+    }
+  );
 
-  const createPostQuery = useMutation(() => NewPost(formDetails), {
-    onSuccess,
-  });
+  const createPostQuery = useMutation(
+    () =>
+      NewPost({
+        ...formDetails,
+        readTime: getReadTime(formDetails.description),
+      }),
+    {
+      onSuccess,
+    }
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();

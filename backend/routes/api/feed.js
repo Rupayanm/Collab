@@ -30,6 +30,7 @@ router.get("/privatefeed", auth, async (req, res) => {
   try {
     let user = await User.findById(req.user.id);
     let feedData = await Post.find({ tags: { $in: user.skills } })
+      .sort({ date: "desc" })
       .limit(limit)
       .skip(startIndex)
       .lean()
@@ -82,6 +83,7 @@ router.get("/publicfeed", authOpt, async (req, res) => {
   };
   try {
     const feedData = await Post.find()
+      .sort({ date: "desc" })
       .limit(limit)
       .skip(startIndex)
       .lean()

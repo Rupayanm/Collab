@@ -60,5 +60,13 @@ const PostSchema = new mongoose.Schema({
   images: {
     type: [],
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
+  readTime: {
+    type: Number,
+    default: 0,
+  },
 });
 module.exports = Post = mongoose.model("post", PostSchema);

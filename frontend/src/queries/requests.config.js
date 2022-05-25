@@ -42,6 +42,16 @@ export const createPostAuth = (value) => {
   };
 };
 
+export const createPut = (value) => {
+  return {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(value),
+  };
+};
+
 export const createPutAuth = (value) => {
   const token = localStorage.getItem(TOKEN);
   return {

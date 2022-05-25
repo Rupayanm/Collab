@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { LOGIN } from "../../routes/routes.contants";
+import SearchAutocomplete from "./SearchAutocomplete";
 
 const Nav = () => {
   const { token, logout } = useAuth();
@@ -10,12 +11,7 @@ const Nav = () => {
     <>
       <div className="flex border-b border-gray-300">
         <div className="flex w-full px-5 py-5 lg:w-4/6 flex-nowrap dark:bg-coolGray-800 dark:text-coolGray-100">
-          <input
-            type="text"
-            placeholder="Search"
-            className="w-full px-4 py-2 text-base text-black transition duration-500 ease-in-out transform border border-gray-300 rounded-lg bg-blueGray-100 focus:border-blueGray-500 focus:bg-white focus:outline-none focus:shadow-outline"
-            required
-          />
+          <SearchAutocomplete />
         </div>
 
         <div className="flex justify-end py-5 pr-5 grow">

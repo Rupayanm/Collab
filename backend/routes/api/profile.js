@@ -112,6 +112,7 @@ router.get("/profilePosts/:id", auth, async (req, res) => {
   const id = req.params.id;
   try {
     const postData = await Post.find({ postedBy: id })
+      .sort({ date: "desc" })
       .skip(startIndex)
       .limit(limit)
       .lean()

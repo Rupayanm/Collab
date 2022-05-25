@@ -35,23 +35,20 @@ const auth = require("../../middleware/auth");
 //   }
 // });
 
-router.get("/posts", async (req, res) => {
+router.post("/posts", async (req, res) => {
   try {
-    console.log(req.body);
+    if (req.body.query === "") {
+      return res.status(200).json([]);
+    }
     const result = await Post.aggregate([
       {
         $search: {
-          autocomplete: {
+          index: "searchIndex",
+          text: {
             query: req.body.query,
             path: "title",
-            fuzzy: {
-              maxEdits: 2,
-            },
           },
         },
-      },
-      {
-        $limit: 10,
       },
     ]);
     res.status(200).json(result);

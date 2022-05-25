@@ -55,8 +55,8 @@ const ListItem = ({ post }) => {
   };
 
   return (
-    <div className="flex w-full group dark:bg-coolGray-800 dark:text-coolGray-100 last:border-b">
-      <div className="container flex flex-row px-2 py-5 mx-auto dark:bg-coolGray-900">
+    <div className="w-full group dark:bg-coolGray-800 dark:text-coolGray-100 last:border-b">
+      <div className="flex flex-row px-2 py-5 mx-auto dark:bg-coolGray-900 w-full">
         <div className="flex flex-col items-center w-6 leading-none pt shrink-0">
           <span
             onClick={() => ratePost("LIKED")}
@@ -90,18 +90,18 @@ const ListItem = ({ post }) => {
             )}
           </span> */}
         </div>
-        <div className="flex-grow pl-4">
+        <div className="grow pl-4">
           <div className="flex items-center justify-between">
             <span className="text-sm text-gray-500">{getTime(post.date)}</span>
           </div>
-          <div className="mt-0.5">
+          <div className="mt-0.5 ">
             <Link to={`/post/${post._id}`}>
-              <p className="text-2xl font-bold truncate cursor-pointer">
+              <p className="text-2xl font-bold line-clamp-2 cursor-pointer">
                 {post.title}
               </p>
             </Link>
             <div
-              className="mt-2 max-h-30 child-ellipsis"
+              className="mt-2 max-h-30 child-ellipsis line-clamp-4"
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(post.description),
               }}
