@@ -40,8 +40,6 @@ app.use("/api/feed", require("./routes/api/feed"));
 
 app.use("/api/upload", require("./routes/api/upload"));
 
-app.get("/", (req, res) => res.send("API Running"));
-
 if (process.env.NODE_ENV === "production") {
   // Set static folder
   app.use(express.static("frontend/build"));
