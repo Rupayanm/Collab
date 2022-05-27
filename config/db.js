@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
-const config = require("config");
 let db = "";
 
 if (process.env.NODE_ENV === "production") {
   db = process.env.MONGODB_URI;
 } else {
+  const config = require("config");
   db = config.get("mongoURI");
 }
 
