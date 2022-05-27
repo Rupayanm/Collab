@@ -2,11 +2,13 @@ const express = require("express");
 const auth = require("../../middleware/auth");
 const User = require("../../models/User");
 const { check, validationResult } = require("express-validator");
-const config = require("config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+require("dotenv").config();
 
 const router = express.Router();
+
+const jwtSecret = process.env.jwtSecret;
 
 // @route POST api/auth/
 // @desc Login POST email password
@@ -39,15 +41,10 @@ router.post(
           name: user.name,
         },
       };
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 3600000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
+      jwt.sign(payload, jwtSecret, { expiresIn: 3600000 }, (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      });
     } catch (err) {
       console.log(err.message);
       res.status(500).send("server error");

@@ -3,7 +3,6 @@ const router = express.Router();
 const { check, validationResult } = require("express-validator");
 const User = require("../../models/User");
 const Post = require("../../models/Post");
-const config = require("config");
 const auth = require("../../middleware/auth");
 const path = require("path");
 const crypto = require("crypto");
@@ -12,8 +11,11 @@ const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
 const methodOverride = require("method-override");
+require("dotenv").config();
 
 const conn = mongoose.connection;
+
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Init gfs
 let gfs;
@@ -24,7 +26,7 @@ conn.once("open", () => {
 });
 // Create storage engine
 const storage = new GridFsStorage({
-  url: config.get("mongoURI"),
+  url: MONGODB_URI,
   file: (req, file) => {
     return new Promise((resolve, reject) => {
       crypto.randomBytes(16, (err, buf) => {

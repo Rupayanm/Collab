@@ -6,10 +6,10 @@ const Post = require("../../models/Post");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("config");
 const auth = require("../../middleware/auth");
 const authOpt = require("../../middleware/authOpt");
 const util = require("util");
+require("dotenv").config();
 
 router.get("/privatefeed", auth, async (req, res) => {
   const page = parseInt(req.query.page);

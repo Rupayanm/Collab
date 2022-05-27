@@ -5,8 +5,8 @@ const User = require("../../models/User");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("config");
 const auth = require("../../middleware/auth");
+require("dotenv").config();
 
 // @route    GET api/search/:id
 // @desc     Get profiles from query

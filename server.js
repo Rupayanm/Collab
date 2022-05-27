@@ -4,7 +4,6 @@ const cors = require("cors");
 const app = express();
 const Post = require("./models/Post");
 const User = require("./models/User");
-const config = require("config");
 const path = require("path");
 const crypto = require("crypto");
 const mongoose = require("mongoose");

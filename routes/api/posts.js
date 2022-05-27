@@ -5,10 +5,10 @@ const Post = require("../../models/Post");
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const config = require("config");
 const auth = require("../../middleware/auth");
 const checkObjectId = require("../../middleware/checkObjectID");
 const router = express.Router();
+require("dotenv").config();
 
 router.post(
   "/createPost",
