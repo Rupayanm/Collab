@@ -64,11 +64,12 @@ router.get("/privatefeed", auth, async (req, res) => {
 });
 
 router.get("/publicfeed", authOpt, async (req, res) => {
+  console.log(req, "Feed Request");
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
 
   let user = req.user ? await User.findById(req.user.id) : null;
-
+  console.log(user, "Public feed user");
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const feed = [];
