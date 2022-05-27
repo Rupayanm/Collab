@@ -64,12 +64,10 @@ router.get("/privatefeed", auth, async (req, res) => {
 });
 
 router.get("/publicfeed", authOpt, async (req, res) => {
-  console.log(req.body, "Feed Request");
   const page = parseInt(req.query.page);
   const limit = parseInt(req.query.limit);
 
   let user = req.user ? await User.findById(req.user.id) : null;
-  console.log(user, "Public feed user");
 
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
@@ -90,7 +88,6 @@ router.get("/publicfeed", authOpt, async (req, res) => {
       .skip(startIndex)
       .lean()
       .exec();
-    console.log(feedData, "feedData");
     for (let post in feedData) {
       const author = await User.findById(feedData[post].postedBy)
         .select("name email avatar")
@@ -115,7 +112,6 @@ router.get("/publicfeed", authOpt, async (req, res) => {
       }
     }
     results.feed = feed;
-    console.log("Results", results);
     res.status(200).json(results);
   } catch (e) {
     res.status(500).json({ message: e.message });
