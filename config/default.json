@@ -1,4 +1,0 @@
-{
-  "mongoURI": "mongodb+srv://Collab:collab0508admin@collab.jnmkt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
-  "jwtSecret": "jwtSecret"
-}
