@@ -4,7 +4,6 @@ const jwtSecret = process.env.jwtSecret;
 
 //Optional Auth
 module.exports = function (req, res, next) {
-  console.log(req.body, "authOpt");
   const token = req.header("x-auth-token");
   try {
     const decoded = jwt.verify(token, jwtSecret);

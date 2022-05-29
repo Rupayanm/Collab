@@ -242,6 +242,7 @@ router.put("/like/:id", auth, checkObjectId("id"), async (req, res) => {
       id: req.user.id,
       name: req.user.name,
       body: "post liked",
+      postId: req.params.id,
     };
     await User.findByIdAndUpdate(post.postedBy, {
       $set: { [`notifications.${req.user.id}.like`]: notification },
@@ -340,6 +341,7 @@ router.post(
         id: req.user.id,
         name: req.user.name,
         body: "comment in your post",
+        postId: req.params.id,
       };
       await User.findByIdAndUpdate(post.postedBy, {
         $set: { [`notifications.${req.user.id}.comment`]: notification },
