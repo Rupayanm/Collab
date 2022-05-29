@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useLocation, useParams, useHistory } from "react-router-dom";
 import { useQuery } from "react-query";
-import ListItem from "../Feed/ListItem";
+import ListItem, { LoadingSkeleton } from "../Feed/ListItem";
 // import { getFeed } from "../../../queries/FeedQuery";
 import { FiSettings } from "react-icons/fi";
 import ProfileCard from "../../rightbar/ProfileCard/ProfileCard";
@@ -20,7 +20,7 @@ const Profile = () => {
   const location = useLocation();
   id = id !== ":id" && id !== "me" ? id : null;
 
-  const { data, refetch } = useQuery([GETPROFILEFEED], () =>
+  const { data, refetch, isLoading } = useQuery([GETPROFILEFEED], () =>
     GetProfileFeed(id ?? user?._id)
   );
 
@@ -55,9 +55,36 @@ const Profile = () => {
           )}
         </div>
         <div className="grid w-full grid-cols-1 px-1 divide-y divide-gray-200 ">
-          {data?.posts?.map((post, index) => (
-            <ListItem post={post} key={index} refetch={refetch} />
-          ))}
+          {isLoading ? (
+            <>
+              <div className="flex flex-col divide-y">
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+                <LoadingSkeleton />
+              </div>
+            </>
+          ) : (
+            <>
+              {data?.posts && data?.posts?.length === 0 ? (
+                <p className="py-3 px-2.5 text-xl text-gray-500 leading-8">
+                  Oops no posts found!
+                  <br />
+                  <Link to="/create">
+                    <span className="text-green-400 hover:text-red-400 duration-300">
+                      Create
+                    </span>
+                  </Link>{" "}
+                  your first post now!
+                </p>
+              ) : (
+                <>
+                  {data?.posts?.map((post, index) => (
+                    <ListItem post={post} key={index} refetch={refetch} />
+                  ))}
+                </>
+              )}
+            </>
+          )}
         </div>
       </div>
     </>

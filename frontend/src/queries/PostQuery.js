@@ -5,17 +5,14 @@ import {
   createPut,
   createPutAuth,
   createDeleteAuth,
-  apiURL
+  apiURL,
   //   createPost,
 } from "./requests.config";
 
 export const NEWPOST = "NEW_POST";
 export const NewPost = async (values) => {
   const data = await (
-    await fetch(
-      `${apiURL}posts/createPost`,
-      createPostAuth(values)
-    )
+    await fetch(`${apiURL}posts/createPost`, createPostAuth(values))
   ).json();
   return data;
 };
@@ -31,10 +28,7 @@ export const GetPost = async (id) => {
 export const UPDATEPOST = "UPDATE_POST";
 export const UpdatePost = async (id, value) => {
   const data = await (
-    await fetch(
-      `${apiURL}posts/editPost/` + id,
-      createPostAuth(value)
-    )
+    await fetch(`${apiURL}posts/editPost/` + id, createPostAuth(value))
   ).json();
   return data;
 };
@@ -74,10 +68,7 @@ export const DislikePost = async (id) => {
 export const ADDCOMMENT = "ADD_COMMENT";
 export const AddComment = async (id, values) => {
   const data = await (
-    await fetch(
-      `${apiURL}posts/comment/` + id,
-      createPostAuth(values)
-    )
+    await fetch(`${apiURL}posts/comment/` + id, createPostAuth(values))
   ).json();
   return data;
 };

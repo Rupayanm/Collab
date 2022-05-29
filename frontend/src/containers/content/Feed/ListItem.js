@@ -137,4 +137,27 @@ const ListItem = ({ post }) => {
   );
 };
 
+export const LoadingSkeleton = () => {
+  return (
+    <div className="flex items-stretch py-2 animate-pulse">
+      <div className="flex flex-col shrink-0 w-10  py-2">
+        <div className="h-6 w-6 mb-1.5 rounded-full bg-gray-300 mx-auto"></div>
+        <div className="h-4 w-6 mb-1.5 rounded-md bg-gray-300 mx-auto"></div>
+        <div className="h-6 w-6 rounded-full bg-gray-300 mx-auto"></div>
+      </div>
+      <div className="flex flex-col py-2.5 pl-2 grow">
+        <div className="h-4 mb-2 w-32 bg-gray-300 rounded-md"></div>
+        <div className="h-12 mb-3 w-72 bg-gray-300 rounded-xl"></div>
+        <div className="h-4 mb-1.5 w-10/12 bg-gray-300 rounded-md"></div>
+        <div className="h-4 mb-1.5 w-11/12 bg-gray-300 rounded-md"></div>
+        <div className="h-4 mb-4 w-2/3 bg-gray-300 rounded-md"></div>
+        <div className="flex w-full justify-between">
+          <div className="h-4 w-32 bg-gray-300 rounded-md"></div>
+          <div className="h-4 w-40 bg-gray-300 rounded-md"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default ListItem;
