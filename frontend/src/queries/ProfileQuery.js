@@ -2,17 +2,15 @@ import {
   createGet,
   createGetAuth,
   createPostAuth,
+  createPutAuth,
   //   createPost,
-  apiURL
+  apiURL,
 } from "./requests.config";
 
 export const UPDATEPROFILE = "UPDATE_PROFILE";
 export const UpdateProfile = async (values) => {
   const data = await (
-    await fetch(
-      `${apiURL}profile/updateinfo`,
-      createPostAuth(values)
-    )
+    await fetch(`${apiURL}profile/updateinfo`, createPostAuth(values))
   ).json();
   return data;
 };
@@ -51,6 +49,22 @@ export const GetMyProfileFeed = async (page = 1, limit = 50) => {
       `${apiURL}profile/profilePosts/me?page=${page}&limit=${limit}`,
       createGetAuth()
     )
+  ).json();
+  return data;
+};
+
+export const GETNOTIFICATIONS = "GETNOTIFICATIONS";
+export const GetNotifications = async () => {
+  const data = await (
+    await fetch(`${apiURL}users/notifications`, createGetAuth())
+  ).json();
+  return data;
+};
+
+export const READNOTIFICATION = "READNOTIFICATION";
+export const ReadNotification = async (id) => {
+  const data = await (
+    await fetch(`${apiURL}users/notifications/read/` + id, createPutAuth())
   ).json();
   return data;
 };

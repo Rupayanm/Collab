@@ -13,8 +13,20 @@
   }
 }
 
-.scrollbar-hide::webkit-scrollbar {
+.scrollbar-hide::-webkit-scrollbar {
   width: 0;
+}
+
+.noti {
+  overflow: overlay;
+}
+
+.noti::-webkit-scrollbar {
+  width: 10px;
+}
+
+.noti::-webkit-scrollbar-thumb {
+  border: 2px solid #edf2f7;
 }
 
 ::-webkit-scrollbar {

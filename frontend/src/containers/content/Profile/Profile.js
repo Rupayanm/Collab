@@ -68,13 +68,18 @@ const Profile = () => {
               {data?.posts && data?.posts?.length === 0 ? (
                 <p className="py-3 px-2.5 text-xl text-gray-500 leading-8">
                   Oops no posts found!
-                  <br />
-                  <Link to="/create">
-                    <span className="text-green-400 hover:text-red-400 duration-300">
-                      Create
-                    </span>
-                  </Link>{" "}
-                  your first post now!
+                  {id === null ||
+                    (id === user?._id && (
+                      <>
+                        <br />
+                        <Link to="/create">
+                          <span className="text-green-400 hover:text-red-400 duration-300">
+                            Create
+                          </span>
+                        </Link>{" "}
+                        your first post now!
+                      </>
+                    ))}
                 </p>
               ) : (
                 <>

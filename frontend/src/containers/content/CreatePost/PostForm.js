@@ -6,7 +6,7 @@ import { skillList } from "../../../Constants";
 import { useFormContext } from "../../../context/FormContext";
 import { NewPost, GetPost, UpdatePost } from "../../../queries/PostQuery";
 import {
-  MultiInput,
+  // MultiInput,
   MultiSelectTabs,
   // TextEditor,
   ToastSuccess,
@@ -29,8 +29,8 @@ const PostForm = () => {
     setDescription,
     addTag,
     removeTag,
-    addLink,
-    removeLink,
+    // addLink,
+    // removeLink,
   } = useFormContext();
 
   const match = matchPath(location.pathname, {
@@ -145,7 +145,7 @@ const PostForm = () => {
               selected={formDetails.tags}
             />
           </div>
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
               External links
             </label>
@@ -154,7 +154,7 @@ const PostForm = () => {
               removeItem={removeLink}
               values={formDetails.links}
             />
-          </div>
+          </div> */}
           <button className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 cursor-pointer ">
             {match ? "Update" : "Create"} Post
           </button>

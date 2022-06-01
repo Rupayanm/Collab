@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const auth = require("../../middleware/auth");
 const checkObjectId = require("../../middleware/checkObjectID");
+const Notifications = require("../../models/Notifications");
 const router = express.Router();
 require("dotenv").config();
 
@@ -238,15 +239,40 @@ router.put("/like/:id", auth, checkObjectId("id"), async (req, res) => {
         { new: true }
       ).select("likesCounter");
     }
-    const notification = {
-      id: req.user.id,
-      name: req.user.name,
-      body: "post liked",
-      postId: req.params.id,
-    };
-    await User.findByIdAndUpdate(post.postedBy, {
-      $set: { [`notifications.${req.user.id}.like`]: notification },
-    });
+
+    if (req.user.id !== post.postedBy) {
+      const postAuthor = await User.findById(post.postedBy);
+      const prevNotification = await Notifications.findOne({
+        "sender._id": req.user.id,
+        type: "LIKE",
+        "post._id": post.id,
+      });
+      if (prevNotification === null) {
+        const notificationFields = {
+          sender: {
+            name: req.user.name,
+            _id: req.user.id,
+          },
+          receiver: {
+            name: postAuthor.name,
+            _id: postAuthor.id,
+          },
+          post: {
+            title: post.title,
+            _id: post.id,
+          },
+          type: "LIKE",
+          content: "liked your post!",
+        };
+
+        let notification = new Notifications({
+          ...notificationFields,
+        });
+
+        await notification.save();
+      }
+    }
+
     return res.status(200).json(likes);
   } catch (err) {
     console.error(err.message);
@@ -337,15 +363,36 @@ router.post(
       post.comments.unshift(newComment);
 
       await post.save();
-      const notification = {
-        id: req.user.id,
-        name: req.user.name,
-        body: "comment in your post",
-        postId: req.params.id,
-      };
-      await User.findByIdAndUpdate(post.postedBy, {
-        $set: { [`notifications.${req.user.id}.comment`]: notification },
-      });
+
+      if (req.user.id !== post.postedBy) {
+        const postAuthor = await User.findById(post.postedBy);
+
+        const notificationFields = {
+          sender: {
+            name: req.user.name,
+            _id: req.user.id,
+          },
+          receiver: {
+            name: postAuthor.name,
+            _id: postAuthor.id,
+          },
+          post: {
+            title: post.title,
+            _id: post.id,
+          },
+          meta: {
+            body: req.body.text,
+          },
+          type: "COMMENT",
+          content: "commented on your post!",
+        };
+
+        let notification = new Notifications({
+          ...notificationFields,
+        });
+
+        await notification.save();
+      }
 
       res.json(post.comments);
     } catch (err) {
