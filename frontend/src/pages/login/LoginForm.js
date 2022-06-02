@@ -1,14 +1,16 @@
-import React from "react";
-import { useQuery, useMutation } from "react-query";
-import { useHistory } from "react-router-dom";
+import React, { useState } from "react";
+import { useMutation } from "react-query";
+import { useHistory, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Audio } from "svg-loaders-react";
 import { login } from "../../queries/AuthQuery";
-import { GetMyProfile } from "../../queries/ProfileQuery";
 import { HOME } from "../../routes/routes.contants";
 import { ToastError, Input, BlackButton } from "../../components";
 import { useAuth } from "../../context/AuthContext";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./../../firebase/config";
+import GoogleLogin from "./GoogleLogin";
 
 const initialValues = {
   email: "",
@@ -17,41 +19,39 @@ const initialValues = {
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Required"),
-  password: Yup.string()
-    .min(8, "Must be more than 8 characters")
-    .max(20, "Must be 20 characters or less")
-    .required("Required"),
 });
+
+const showErrorToast = (error) => {
+  switch (error.code) {
+    case "auth/email-already-in-use":
+      ToastError({ message: `Email address already in use.` });
+      break;
+    case "auth/invalid-email":
+      ToastError({ message: `Email address is invalid.` });
+      break;
+    case "auth/operation-not-allowed":
+      ToastError({ message: `Oops!! Error during sign up. Try Again.` });
+      break;
+    case "auth/weak-password":
+      ToastError({ message: `Password is not strong enough.` });
+      break;
+    default:
+      ToastError({ message: error.message });
+      break;
+  }
+};
 
 const LoginForm = ({ setSignup }) => {
   const history = useHistory();
-  const { setUser, setToken } = useAuth();
-
-  const onSuccessProfile = (data) => {
-    if (data.error) {
-      ToastError({ message: data.error.msg });
-    } else {
-      setUser(data);
-      history.push(HOME);
-    }
-  };
-
-  const { refetch: getProfileInfo, isLoading: isLoadingProfile } = useQuery(
-    "getMyProfile",
-    GetMyProfile,
-    {
-      enabled: false,
-      onSuccess: onSuccessProfile,
-      cacheTime: 500,
-    }
-  );
+  const [isLoading, setIsLoading] = useState(false);
+  const { setToken } = useAuth();
 
   const onSuccess = (data) => {
     if (data.token === undefined || data.error) {
       ToastError({ message: data.error ? data.error : "Invalid Token" });
     } else {
       setToken(data.token);
-      getProfileInfo();
+      history.push(HOME);
     }
   };
 
@@ -59,23 +59,31 @@ const LoginForm = ({ setSignup }) => {
     onSuccess,
   });
 
+  async function onSignIn() {
+    try {
+      setIsLoading(true);
+      const data = await signInWithEmailAndPassword(
+        auth,
+        formik.values.email,
+        formik.values.password
+      );
+      loginQuery.mutate({ ...formik.values, userUID: data.user.uid });
+    } catch (e) {
+      showErrorToast(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   const formik = useFormik({
     initialValues,
-    onSubmit: (values) => loginQuery.mutate(values),
+    // onSubmit: (values) => loginQuery.mutate(values),
+    onSubmit: onSignIn,
     validationSchema,
   });
 
   const ButtonText = () => {
-    if (isLoadingProfile) {
-      return (
-        <>
-          <div className="text-sm font-semibold text-center text-gray-200">
-            You will be redirected soon..
-          </div>
-        </>
-      );
-    }
-    if (loginQuery.isLoading) {
+    if (isLoading || loginQuery.isLoading) {
       return <Audio height={20} width={20} className="w-full mx-auto" />;
     }
     return <div>Log in</div>;
@@ -96,10 +104,12 @@ const LoginForm = ({ setSignup }) => {
               name="email"
               type="email"
               placeholder="Your Email "
+              autoComplete="email"
               value={formik.values.email}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.errors.email}
+              touched={formik.touched.email}
             />
           </div>
           <div className="mt-4">
@@ -110,80 +120,42 @@ const LoginForm = ({ setSignup }) => {
               name="password"
               type="password"
               placeholder="Your Password"
+              autoComplete="current-password"
               value={formik.values.password}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               error={formik.errors.password}
+              touched={formik.touched.password}
             />
           </div>
           <div className="mt-2 text-right">
-            <p className="text-sm font-semibold leading-relaxed cursor-pointer text-blueGray-700 hover:text-black focus:text-blue-700">
+            <Link
+              to="/login/recovery"
+              className="text-sm font-semibold leading-relaxed cursor-pointer text-blueGray-700 hover:text-black focus:text-blue-700"
+            >
               Forgot Password?
-            </p>
+            </Link>
           </div>
           <BlackButton
             type="submit"
-            disabled={loginQuery.isLoading || isLoadingProfile}
+            disabled={loginQuery.isLoading || isLoading}
           >
             <ButtonText />
           </BlackButton>
         </form>
         <hr className="w-full my-6 border-blueGray-300" />
         <div className="flex justify-center">
-          <button
-            type="button"
-            className="inline-flex justify-center w-full px-4 py-3 font-semibold text-black transition duration-500 ease-in-out transform bg-white border rounded-lg border-blueGray-300 hover:bg-black hover:text-white focus:outline-none focus:shadow-outline focus:ring-2 "
-          >
-            <div className="flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlnsXlink="http://www.w3.org/1999/xlink"
-                className="w-6 h-6"
-                viewBox="0 0 48 48"
-              >
-                <defs>
-                  <path
-                    id="a"
-                    d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"
-                  ></path>
-                </defs>
-                <clipPath id="b">
-                  <use xlinkHref="#a" overflow="visible"></use>
-                </clipPath>
-                <path
-                  clipPath="url(#b)"
-                  fill="#FBBC05"
-                  d="M0 37V11l17 13z"
-                ></path>
-                <path
-                  clipPath="url(#b)"
-                  fill="#EA4335"
-                  d="M0 11l17 13 7-6.1L48 14V0H0z"
-                ></path>
-                <path
-                  clipPath="url(#b)"
-                  fill="#34A853"
-                  d="M0 37l30-23 7.9 1L48 0v48H0z"
-                ></path>
-                <path
-                  clipPath="url(#b)"
-                  fill="#4285F4"
-                  d="M48 48L17 24l-4-3 35-10z"
-                ></path>
-              </svg>
-              <span className="ml-4"> Log in with Google </span>
-            </div>
-          </button>
+          <GoogleLogin />
         </div>
 
         <div className="flex justify-between mt-8 text-center">
           <p> Need an account? </p>
-          <p
+          <Link
+            to="/signup"
             className="font-semibold text-blue-500 cursor-pointer hover:text-blue-700"
-            onClick={() => setSignup(true)}
           >
             Sign Up
-          </p>
+          </Link>
         </div>
       </div>
     </>

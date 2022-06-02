@@ -1,16 +1,17 @@
 import React, { useState } from "react";
-import { useQuery, useMutation } from "react-query";
-import { useHistory } from "react-router-dom";
+import { useMutation } from "react-query";
+import { useHistory, Link } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import SocialForm from "./SocialForm";
 import DetailsForm from "./DetailsForm";
 import SkillForm from "./SkillForm";
-import { HOME } from "../../../routes/routes.contants";
-import { signup } from "../../../queries/AuthQuery";
-import { GetMyProfile } from "../../../queries/ProfileQuery";
-import { ToastError, ToastSuccess } from "../../../components/Toasts";
-import { useAuth } from "../../../context/AuthContext";
+import { HOME } from "../../routes/routes.contants";
+import { signup } from "../../queries/AuthQuery";
+import { ToastError, ToastSuccess } from "../../components/Toasts";
+import { useAuth } from "../../context/AuthContext";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./../../firebase/config";
 
 const initialValues = {
   name: "",
@@ -31,29 +32,50 @@ const validationSchema = Yup.object({
     .required("Required"),
 });
 
-const SignUpForm = ({ setSignup }) => {
+const showErrorToast = (error) => {
+  switch (error.code) {
+    case "auth/email-already-in-use":
+      ToastError({ message: `Email address already in use.` });
+      break;
+    case "auth/invalid-email":
+      ToastError({ message: `Email address is invalid.` });
+      break;
+    case "auth/operation-not-allowed":
+      ToastError({ message: `Oops!! Error during sign up. Try Again.` });
+      break;
+    case "auth/weak-password":
+      ToastError({ message: `Password is not strong enough.` });
+      break;
+    default:
+      ToastError({ message: error.message });
+      break;
+  }
+};
+
+const SignUpForm = () => {
   const [step, setStep] = useState(1);
-  const { setUser, setToken } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+  const { setToken } = useAuth();
   const history = useHistory();
 
-  const onSuccessProfile = (data) => {
-    if (data.error) {
-      ToastError({ message: data.error.msg });
-    } else {
-      setUser(JSON.stringify(data));
-      history.push(HOME);
+  const onCreateUser = async () => {
+    if (formik.validateField("email") && formik.validateField("password")) {
+      try {
+        setIsLoading(true);
+        const data = await createUserWithEmailAndPassword(
+          auth,
+          formik.values.email,
+          formik.values.password
+        );
+        console.log("user UID");
+        signUpQuery.mutate({ ...formik.values, userUID: data?.user.uid });
+      } catch (e) {
+        showErrorToast(e);
+      } finally {
+        setIsLoading(false);
+      }
     }
   };
-
-  const { refetch: getProfileInfo, isLoading: isLoadingProfile } = useQuery(
-    "getMyProfile",
-    GetMyProfile,
-    {
-      enabled: false,
-      onSuccess: onSuccessProfile,
-      cacheTime: 500,
-    }
-  );
 
   const onSuccess = (data) => {
     if (data.token === undefined || data.errors) {
@@ -61,7 +83,7 @@ const SignUpForm = ({ setSignup }) => {
     } else {
       ToastSuccess({ message: "Account registered" });
       setToken(data.token);
-      getProfileInfo();
+      history.push(HOME);
     }
   };
 
@@ -71,7 +93,7 @@ const SignUpForm = ({ setSignup }) => {
 
   const formik = useFormik({
     initialValues,
-    onSubmit: (values) => signUpQuery.mutate(values),
+    onSubmit: onCreateUser,
     validationSchema,
   });
 
@@ -87,8 +109,8 @@ const SignUpForm = ({ setSignup }) => {
           <SocialForm
             setStep={setStep}
             formik={formik}
-            isLoading={signUpQuery.isLoading}
-            isLoadingProfile={isLoadingProfile}
+            isLoading={signUpQuery.isLoading || isLoading}
+            isLoadingProfile={false}
           />
         ) : null}
       </form>
@@ -96,14 +118,12 @@ const SignUpForm = ({ setSignup }) => {
 
       <div className="flex justify-between mt-8 text-center">
         <p> Already have an account? </p>
-        <p
+        <Link
+          to="/login"
           className="font-semibold text-blue-500 cursor-pointer hover:text-blue-700"
-          onClick={() => {
-            setSignup(false);
-          }}
         >
           Login
-        </p>
+        </Link>
       </div>
     </div>
   );

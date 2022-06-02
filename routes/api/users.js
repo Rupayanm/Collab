@@ -19,19 +19,16 @@ router.post(
   [
     check("name", "Name is required").not().isEmpty(),
     check("email", "please include a valid email").isEmail(),
-    check(
-      "password",
-      "please enter a password with 6 or more characters"
-    ).isLength({ min: 6 }),
+    check("userUID", "userUID is required").exists(),
   ],
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password, skills } = req.body;
+    const { name, email, skills, userUID } = req.body;
     try {
-      let user = await User.findOne({ email });
+      let user = await User.findOne({ userUID });
 
       if (user) {
         return res
@@ -46,12 +43,10 @@ router.post(
       user = new User({
         name,
         email,
+        userUID,
         avatar,
-        password,
         skills,
       });
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(password, salt);
       await user.save();
       const payload = {
         user: {

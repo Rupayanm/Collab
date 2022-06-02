@@ -9,9 +9,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  password: {
+  userUID: {
     type: String,
     required: true,
+  },
+  password: {
+    type: String,
   },
   images: {
     type: { String },
@@ -44,6 +47,7 @@ const UserSchema = new mongoose.Schema({
   },
   skills: {
     type: [String],
+    default: [],
   },
   bio: {
     type: String,

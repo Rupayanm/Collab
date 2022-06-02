@@ -2,6 +2,8 @@ import React, { createContext, useReducer, useContext } from "react";
 import { TOKEN, PROFILEKEY } from "../Constants";
 import { useQuery } from "react-query";
 import { GETMYPROFILE, GetMyProfile } from "./../queries/ProfileQuery";
+import { signOut } from "firebase/auth";
+import { auth } from "./../firebase/config";
 
 export const AuthContext = createContext();
 
@@ -70,7 +72,16 @@ export const useAuth = () => {
     },
   });
 
+  const signout = async () => {
+    try {
+      await signOut(auth);
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
   const logout = () => {
+    signout();
     dispatch({ type: actionTypes.logout });
   };
 

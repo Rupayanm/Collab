@@ -96,10 +96,11 @@ const ProfileEditCard = () => {
           <Input
             name="designation"
             type="text"
-            placeholder=""
+            placeholder="Software developer ..."
             value={formik.values.designation}
             onChange={formik.handleChange}
             error={formik.errors.designation}
+            touched={formik.touched.designation}
           />
         </div>
         <div className="px-5 py-3 ">
@@ -112,11 +113,11 @@ const ProfileEditCard = () => {
             placeholder="Your bio"
             value={formik.values.bio}
             onChange={formik.handleChange}
-            className={`w-full px-3 py-2 mt-2 text-base text-black transition duration-500 ease-in-out transform border border-gray-300 rounded-lg resize-none h-36 bg-blueGray-100 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ${
-              formik.errors.bio && "ring-2 ring-red-300"
+            className={`w-full px-3 py-2 mt-2 text-base text-black transition duration-300 transform border border-gray-300 rounded-lg resize-none h-36 bg-blueGray-100 focus:bg-white focus:outline-none focus:shadow-outline focus:ring-2 ring-offset-current ring-offset-2 ${
+              formik.errors.bio && formik.touched.bio && "ring-2 ring-red-300"
             }`}
           />
-          {formik.errors.bio && (
+          {formik.errors.bio && formik.touched.bio && (
             <div className="text-xs font-medium text-right text-red-400">
               {formik.errors.bio}
             </div>

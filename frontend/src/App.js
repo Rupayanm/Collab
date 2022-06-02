@@ -1,5 +1,6 @@
 import React, { useEffect, Suspense } from "react";
-import Login from "./pages/login/Login";
+import Login from "./pages/login";
+import Signup from "./pages/signup";
 import { Switch, BrowserRouter, Redirect, Route } from "react-router-dom";
 import Layout from "./pages/layout/Layout";
 import { PublicRoute } from "./routes/CustomRoutes";
@@ -44,7 +45,8 @@ function App() {
           <Suspense fallback={<Loading />}>
             <BrowserRouter>
               <Switch>
-                <PublicRoute exact path="/login" component={Login} />
+                <PublicRoute path="/login" component={Login} />
+                <PublicRoute exact path="/signup" component={Signup} />
                 <Route path={paths} component={Layout} />
                 <Redirect exact to={HOME} from={"/"} />
               </Switch>

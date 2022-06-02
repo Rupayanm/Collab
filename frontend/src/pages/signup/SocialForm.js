@@ -1,7 +1,7 @@
 import React from "react";
 import { FaChevronLeft } from "react-icons/fa";
 import { Audio } from "svg-loaders-react";
-import { MultiSocialForm } from "../../../components";
+import { MultiSocialForm } from "../../components";
 
 const SocialForm = ({ formik, setStep, isLoading, isProfileLoading }) => {
   return (

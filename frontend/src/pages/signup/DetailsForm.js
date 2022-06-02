@@ -1,5 +1,5 @@
 import React from "react";
-import { Input } from "../../../components";
+import { Input } from "../../components";
 
 const DetailsForm = ({ setStep, formik }) => {
   const nextPage = () => {
@@ -21,6 +21,7 @@ const DetailsForm = ({ setStep, formik }) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.errors.name}
+          touched={formik.touched.name}
           placeholder="Your Full Name "
         />
       </div>
@@ -35,6 +36,7 @@ const DetailsForm = ({ setStep, formik }) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.errors.email}
+          touched={formik.touched.email}
           placeholder="Your Email "
         />
       </div>
@@ -51,6 +53,7 @@ const DetailsForm = ({ setStep, formik }) => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           error={formik.errors.password}
+          touched={formik.touched.password}
         />
       </div>
       <div

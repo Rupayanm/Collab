@@ -1,7 +1,7 @@
 import React from "react";
 import { FaChevronLeft } from "react-icons/fa";
-import { skillList } from "../../../Constants";
-import { MultiSelectTabs } from "../../../components";
+import { skillList } from "../../Constants";
+import { MultiSelectTabs } from "../../components";
 
 const SkillForm = ({ formik, setStep }) => {
   return (
