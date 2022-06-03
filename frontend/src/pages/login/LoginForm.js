@@ -36,7 +36,13 @@ const showErrorToast = (error) => {
       ToastError({ message: `Password is not strong enough.` });
       break;
     default:
-      ToastError({ message: error.message });
+      ToastError({
+        message: error.code
+          .slice(5)
+          .split("-")
+          .join(" ")
+          .replace(/(^|\s)\S/g, (letter) => letter.toUpperCase()),
+      });
       break;
   }
 };

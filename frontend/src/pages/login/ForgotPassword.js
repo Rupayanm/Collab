@@ -7,7 +7,7 @@ import { HOME } from "../../routes/routes.contants";
 import { ToastError, Input, BlackButton, ToastSuccess } from "../../components";
 
 const showErrorToast = (error) => {
-  const errormessage = error.message.slice(5).split("-").join(" ");
+  const errormessage = error.code.slice(5).split("-").join(" ");
   ToastError({ message: errormessage });
 };
 

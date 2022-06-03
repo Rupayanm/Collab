@@ -12,7 +12,7 @@ const router = express.Router();
 const jwtSecret = process.env.jwtSecret;
 
 // @route POST api/auth/
-// @desc Login POST email password
+// @desc Login POST email userUID
 // @access Public
 router.post(
   "/",
@@ -82,7 +82,6 @@ router.post(
             error: { msg: "Please contact support : UserUID not matched" },
           });
         }
-
         const payload = {
           user: {
             id: user.id,
@@ -112,6 +111,7 @@ router.post(
       const payload = {
         user: {
           id: user.id,
+          name: user.name,
         },
       };
       jwt.sign(payload, jwtSecret, { expiresIn: 360000 }, (err, token) => {

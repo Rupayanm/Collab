@@ -67,7 +67,6 @@ const SignUpForm = () => {
           formik.values.email,
           formik.values.password
         );
-        console.log("user UID");
         signUpQuery.mutate({ ...formik.values, userUID: data?.user.uid });
       } catch (e) {
         showErrorToast(e);

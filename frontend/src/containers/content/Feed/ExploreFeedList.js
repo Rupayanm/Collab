@@ -1,10 +1,8 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import ListItem, { LoadingSkeleton } from "./ListItem";
 import { useQuery } from "react-query";
 import { getPublicFeed, GETPUBLICFEED } from "../../../queries/FeedQuery";
 import { useAuth } from "../../../context/AuthContext";
-// import Pagination from "../../../components/Pagination";
 
 const ExploreFeed = () => {
   const { token } = useAuth();
@@ -37,14 +35,7 @@ const ExploreFeed = () => {
               </>
             ) : (
               <p className="py-4 text-xl text-gray-500 leading-8">
-                Oops no posts match your skillset !!!
-                <br />
-                <Link to="/explore">
-                  <span className="text-green-400 hover:text-red-400 duration-300">
-                    Explore
-                  </span>
-                </Link>{" "}
-                all posts
+                Oops no posts found !!!
               </p>
             )}
           </>

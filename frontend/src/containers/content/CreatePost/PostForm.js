@@ -14,7 +14,7 @@ import {
 import ArticleEditor from "./ArticleEditor";
 
 const getReadTime = (paragraph) => {
-  return Math.ceil(((paragraph?.split(" ")?.length || 0) * 60) / 200);
+  return Math.ceil(((paragraph?.split(" ")?.length || 0) * 60) / 280);
 };
 
 const PostForm = () => {
