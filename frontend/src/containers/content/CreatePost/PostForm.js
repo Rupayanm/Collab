@@ -103,7 +103,7 @@ const PostForm = () => {
         <h1 className="mt-16 text-3xl font-semibold text-black tracking-ringtighter sm:text-3xl title-font">
           Post
         </h1>
-        <form className="mt-6" onSubmit={handleSubmit}>
+        <div className="mt-6">
           <div>
             <label className="block text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
               Title<span className="text-red-500">*</span>
@@ -155,10 +155,13 @@ const PostForm = () => {
               values={formDetails.links}
             />
           </div> */}
-          <button className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 cursor-pointer ">
+          <button
+            className="block w-full px-4 py-3 mt-6 text-center font-semibold text-white transition duration-500 ease-in-out transform bg-black rounded-lg hover:bg-blueGray-800 focus:shadow-outline focus:outline-none focus:ring-2 ring-offset-current ring-offset-2 cursor-pointer "
+            onClick={handleSubmit}
+          >
             {match ? "Update" : "Create"} Post
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );

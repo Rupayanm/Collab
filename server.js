@@ -2,15 +2,8 @@ const express = require("express");
 const connectDB = require("./config/db");
 const cors = require("cors");
 const app = express();
-const Post = require("./models/Post");
-const User = require("./models/User");
 const path = require("path");
-const crypto = require("crypto");
 const mongoose = require("mongoose");
-const multer = require("multer");
-const { GridFsStorage } = require("multer-gridfs-storage");
-const Grid = require("gridfs-stream");
-const methodOverride = require("method-override");
 // connect Database
 connectDB();
 

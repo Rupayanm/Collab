@@ -14,7 +14,7 @@ import { PROFILE } from "./../../../routes/routes.contants";
 import {
   MultiSelectTabs,
   MultiSocialForm,
-  DropzoneInput,
+  // DropzoneInput,
   Input,
   Loading,
 } from "../../../components";
@@ -86,10 +86,8 @@ const ProfileEditCard = () => {
         <div className="w-full pt-5 mx-auto text-xl font-bold text-center ">
           {profileData.name}
         </div>
-        <div>
-          <DropzoneInput />
-        </div>
-        <div className="px-5 ">
+        <div>{/* <DropzoneInput /> */}</div>
+        <div className="px-5 pt-3">
           <label className="block mb-2 text-sm font-medium leading-relaxed tracking-tighter text-blueGray-700">
             Designation
           </label>

@@ -42,14 +42,14 @@ const ProfileCard = () => {
     <>
       <div className="m-2 border border-gray-300 rounded-xl scrollbar-hide">
         <div className="relative flex items-center h-32 py-4">
-          <div className="rounded-xl ml-3 z-10 h-[5.5rem] w-28  overflow-hidden">
+          {/* <div className="rounded-xl ml-3 z-10 h-[5.5rem] w-28  overflow-hidden">
             <img
               src={profileData?.avatar}
               alt="profile"
               className="w-24 h-24 rounded-r-2xl "
             ></img>
-          </div>
-          <div className="z-10 flex flex-col justify-center w-full h-full">
+          </div> */}
+          <div className="z-10 px-4 flex flex-col justify-center w-full h-full">
             <div className="flex items-end px-3 text-xl font-medium h-1/2">
               {profileData?.name}
             </div>
